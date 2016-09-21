@@ -1,5 +1,5 @@
 $(function() {
-	// avoid that f5 resets the game
+	// app ignores f5, preventing to reset the game by mistake
 	document.onkeydown = function(){
 	  switch (event.keyCode){
 			case 116 : //F5 button
