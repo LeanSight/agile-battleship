@@ -44,20 +44,20 @@ var CellView = Backbone.View.extend({
 			this.$el.addClass("cell-title-bottom");
 		}
 		
-		if(cell_x === 0) {
+		if(cell_y === 0) {
 			this.disable();
-			this.$el.addClass("cell-title-left");
-			if(cell_y>0 && cell_y<=10 ){
-				this.$el.html(cell_y);		  
+			this.$el.addClass("cell-title-top");
+			if(cell_x>0 && cell_x<=10 ){
+				this.$el.html(cell_x);		  
 			}
 		}
 
 		A_charcode = "A".charCodeAt(0);
-		if(cell_y === 0) {
+		if(cell_x === 0) {
 			this.disable();
-			this.$el.addClass("cell-title-top");
-			if(cell_x>0 && cell_x <= 10){
-				this.$el.html(String.fromCharCode(A_charcode+cell_x-1));
+			this.$el.addClass("cell-title-left");
+			if(cell_y>0 && cell_y <= 10){
+				this.$el.html(String.fromCharCode(A_charcode+cell_y-1));
 			}
 		}
     this.renderBoat();
