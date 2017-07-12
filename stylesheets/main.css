@@ -9,10 +9,10 @@ footer {
 }
 
 .cell {
-  border-top: 1px solid #bce8f1;
-  border-left: 1px solid #bce8f1;
-  border-right: 1px solid #bce8f1;
-  border-bottom: 1px solid #bce8f1;
+  border-top: 1px solid blue;
+  border-left: 1px solid blue;
+  border-right: 1px solid blue;
+  border-bottom: 1px solid blue;
   text-align: center;
   min-width: 40px;
   position: relative;
