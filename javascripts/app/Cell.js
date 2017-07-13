@@ -19,7 +19,9 @@ var CellView = Backbone.View.extend({
   tagName: "td",
   className: "cell",
   events: {
-    "click": "fire"
+    "click": "fire",
+    "mouseover" : "mouseovercell",
+    "mouseleave": "mouseleavecell"
   },
   initialize: function() {
     _.bindAll(this, "renderBoat", "updateState", "disable");
@@ -64,8 +66,10 @@ var CellView = Backbone.View.extend({
     return this;
   },
   renderBoat: function() {
-    if (this.model.has('boat')) {
-      if (this.model.get("boat").get("visible")) {
+    if (this.model.has('boat')) 
+    {
+      if (this.model.get("boat").get("visible")) 
+      {
         this.$el.addClass("showBoat");
         this.$el.addClass(this.model.get("boat").get("type"));
       }
@@ -74,22 +78,26 @@ var CellView = Backbone.View.extend({
   },
   updateState: function() {
     if (this.model.get("state") == "hit") {
-      // this.$el.addClass("hit");
       this.$el.html("<img class='hit marker animated bounceIn' src='images/1331900690_fire.png'/>");
-    } else if (this.model.get("state") == "miss") {
+    } 
+    else if (this.model.get("state") == "miss") {
       this.$el.html("<i class='miss marker animated flipInX fa fa-times fa-2x text-muted'></i>");
-      // this.$el.html("<img class='miss marker animated flipInX' src='images/1331900805_cross.png'/>");
       this.$el.addClass("miss-cell");
     }
   },
   fire: function() {
-    // this.$el.addClass("target");
     this.$el.html("<img class='target marker' src='images/1331901174_bullet_red.png'/>");
-    // this.$el.html("<i class='target marker animated slideInDown fa fa-bullseye fa-2x text-info' ></i>");
     this.model.fire();
     this.$el.unbind("click");
   },
   disable: function() {
     this.$el.unbind("click");
   }
+  ,
+  mouseovercell: function(){
+    console.log(this.$el.attr("id")); 
+  },
+  mouseleavecell: function(){
+    
+  },
 });
