@@ -21,8 +21,8 @@ var CellView = Backbone.View.extend({
   className: "cell",
   events: {
     "click": "fire",
-    "mouseover": "mousehovercell",
-    "mouseleave": "mousehovercell",
+    "mouseover": "mouseOverCell",
+    "mouseleave": "mouseLeaveCell",
   },
   build_cell_id: function(val_x,val_y){
     return "cell-" + val_x + "-" + val_y;
@@ -101,17 +101,26 @@ var CellView = Backbone.View.extend({
     this.$el.unbind("click");
   }
   ,
-  mousehovercell: function(){
-    console.log("in board "+this.in_board);
-    if(this.in_board){
-      var column_header_id = this.build_cell_id(this.cell_x,0);
-		  var col_hdr_cell = this.$el.closest('table').find("#"+column_header_id);
+  highlightCell: function(doHighlight){
+      this.$el.toggleClass("cell-hover",doHighlight);
+      
+      var column_header_id   = this.build_cell_id(this.cell_x,0);
+		  var column_header_cell = this.$el.closest('table').find("#"+column_header_id);
 		  
-		  var row_header_id = this.build_cell_id(0,this.cell_y);
-  		var row_hdr_cell = this.$el.closest('table').find("#"+row_header_id);
+		  var row_header_id   = this.build_cell_id(0,this.cell_y);
+  		var row_header_cell = this.$el.closest('table').find("#"+row_header_id);
 
-      col_hdr_cell.toggleClass("cell-title-hover");
-  		row_hdr_cell.toggleClass("cell-title-left-hover");
+      column_header_cell.toggleClass("cell-title-hover",doHighlight);
+  		row_header_cell.toggleClass("cell-title-left-hover",doHighlight);
+  },
+  mouseOverCell: function(){
+    if(this.in_board){
+      this.highlightCell(true);
+    }
+  },
+  mouseLeaveCell: function(){
+    if(this.in_board){
+      this.highlightCell(false);
     }
   },
 });

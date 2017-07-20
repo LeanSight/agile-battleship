@@ -20,6 +20,11 @@ footer {
   margin: 0;
 }
 
+.cell-hover {
+  background-color: #34748f;
+}
+
+
 .cell-title-top {
   border-top: 1px solid white !important;
   border-left: 1px solid white;
@@ -60,7 +65,7 @@ footer {
 	font-size: 24px;
 }
 
-
+*//**/
 .cell-title-bottom {
   border-top: 1px solid #bce8f1;
   border-left: 1px solid white;
