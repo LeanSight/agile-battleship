@@ -15,51 +15,58 @@ var Cell = Backbone.Model.extend({
   }
 });
 
+
 var CellView = Backbone.View.extend({
   tagName: "td",
   className: "cell",
   events: {
     "click": "fire",
-    "mouseover" : "mouseovercell",
-    "mouseleave": "mouseleavecell"
+    "mouseover": "mousehovercell",
+    "mouseleave": "mousehovercell",
+  },
+  build_cell_id: function(val_x,val_y){
+    return "cell-" + val_x + "-" + val_y;
   },
   initialize: function() {
     _.bindAll(this, "renderBoat", "updateState", "disable");
     this.model.bind("change:boat", this.renderBoat);
     this.model.bind("change:state", this.updateState);
     this.model.bind("change:disabled", this.disable);
+		this.cell_x = this.model.get("x");
+		this.cell_y = this.model.get("y");
+		
+		this.in_header = this.cell_x==0 || this.cell_y==0;
+		this.in_board  = !this.in_header && this.cell_x<=10 && this.cell_y<=10;
+		this.id = this.build_cell_id(this.cell_x, this.cell_y);
   },
-  render: function() {
-		cell_x = this.model.get("x");
-		cell_y = this.model.get("y");
-	
-		this.$el.attr("id", "cell-" + cell_x + "-" + cell_y);
-		// this.$el.html();
 
-		if(cell_x > 10){
+  render: function() {
+		this.$el.attr("id", this.id);
+
+		if(this.cell_x > 10){
 			this.disable();
 			this.$el.addClass("cell-title-right");
 		}
 		
-		if(cell_y > 10){
+		if(this.cell_y > 10){
 			this.disable();
 			this.$el.addClass("cell-title-bottom");
 		}
 		
-		if(cell_y === 0) {
+		if(this.cell_y === 0) {
 			this.disable();
 			this.$el.addClass("cell-title-top");
-			if(cell_x>0 && cell_x<=10 ){
-				this.$el.html(cell_x);		  
+			if(this.cell_x>0 && this.cell_x<=10 ){
+				this.$el.html(this.cell_x);		  
 			}
 		}
 
-		A_charcode = "A".charCodeAt(0);
-		if(cell_x === 0) {
+		var A_charcode = "A".charCodeAt(0);
+		if(this.cell_x === 0) {
 			this.disable();
 			this.$el.addClass("cell-title-left");
-			if(cell_y>0 && cell_y <= 10){
-				this.$el.html(String.fromCharCode(A_charcode+cell_y-1));
+			if(this.cell_y>0 && this.cell_y <= 10){
+				this.$el.html(String.fromCharCode(A_charcode+this.cell_y-1));
 			}
 		}
     this.renderBoat();
@@ -94,10 +101,19 @@ var CellView = Backbone.View.extend({
     this.$el.unbind("click");
   }
   ,
-  mouseovercell: function(){
-    console.log(this.$el.attr("id")); 
-  },
-  mouseleavecell: function(){
-    
+  mousehovercell: function(){
+    console.log("in board "+this.in_board);
+    if(this.in_board){
+      var column_header_id = this.build_cell_id(this.cell_x,0);
+		  var col_hdr_cell = this.$el.closest('table').find("#"+column_header_id);
+		  
+		  var row_header_id = this.build_cell_id(0,this.cell_y);
+  		var row_hdr_cell = this.$el.closest('table').find("#"+row_header_id);
+
+      col_hdr_cell.toggleClass("cell-title-hover");
+  		row_hdr_cell.toggleClass("cell-title-left-hover");
+    }
   },
 });
+
+
