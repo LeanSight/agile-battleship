@@ -11,6 +11,7 @@ var Game = Backbone.Model.extend({
     this.set("shotsRemainingForIteration", args.shotsPerIteration);
     this.set("shotsRemainingForGame", this.get("maxShots"));
     this.set("funds", this.get("maxShots") * this.get("costPerShot"));
+    this.set("initialBudget", this.get("funds"));
     
     this.sunken = 0;
     this.set("board", new Board());
@@ -61,6 +62,10 @@ var Game = Backbone.Model.extend({
     if (this.get("shotsRemainingForGame") <= 0) {
       this.endGame();
     }
+    
+    console.log("shot "+this.get("shotsRemainingForIteration")+
+                " budget $"+this.get("initialBudget")+
+                " funds $"+this.get("funds"));
   },
   sunkenBoat: function(boat) {
     this.sunken++;
@@ -113,25 +118,25 @@ var GameView = Backbone.View.extend({
   },
   updateFunds: function() {
     var funds = this.model.get("funds");
-    $("#funds").html(this.euros(funds));
+    $("#funds").html(this.formatMoney(funds));
   },
   updateEndGameState: function(model, endGameState) {
     var diff = this.model.get("funds") - this.model.get("maxShots") * this.model.get("costPerShot");
-    if (endGameState === "lose") {
+    if (endGameState === "lose") { // No se destruyo toda la flota enemiga
       console.log(diff);
       if(diff > 0){
-        $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Ganaste ' + this.euros(diff) + '</div>');
+        $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Ganaste ' + this.formatMoney(diff) + '</div>');
       }
       else if(diff < 0){
-        $("#endGameResult").html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Perdiste ' + this.euros(diff) + '</div>');
+        $("#endGameResult").html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Perdiste ' + this.formatMoney(diff) + '</div>');
       } else {
         $("#endGameResult").html('<div class="alert alert-info alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Mantuviste tu dinero</div>');
       }
-    } else {
-      $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-trophy"></i> ¡Has destruido la flota!</strong> Ganaste ' + this.euros(diff) + '</div>');
+    } else { // Se destruyo toda la flota
+      $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-trophy"></i> ¡Has destruido la flota!</strong> Ganaste ' + this.formatMoney(diff) + '</div>');
     }
   },
-  euros: function(amount) {
+  formatMoney: function(amount) {
     return "US&dollar; " + $.formatNumber(amount, {format:"#,##0", locale:"nl"});
   }
 });
