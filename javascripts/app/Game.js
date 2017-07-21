@@ -103,7 +103,7 @@ var GameView = Backbone.View.extend({
   },
   render: function() {
     this.boardView = new BoardView({model: this.model.get("board")});
-    $("#container").append(this.boardView.render().el);
+    $("#boardcontainer").append(this.boardView.render().el);
     this.updateShotsRemainingForGame();
     this.updateShotsRemainingForIteration();
     this.updateFunds();
