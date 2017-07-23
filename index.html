@@ -17,18 +17,16 @@
 	<script type="text/javascript" src="javascripts/app/Cell.js"></script>
 	<script type="text/javascript" src="javascripts/app/Board.js"></script>
 	<script type="text/javascript" src="javascripts/app/Game.js"></script>
+	<script type="text/javascript" src="javascripts/app/Chart.js"></script>
 
 	<script type="text/javascript" src="javascripts/boot.js"></script>
 
 	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-	<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-	<script>
-		zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
-		ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
-	</script>
-
-
+	<script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+	<!--<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];</script>-->
+	<script src="https:cdn.zingchart.com/backbone/backbone.zingchart.min.js"></script>
+	
 	<link href='https://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
@@ -105,7 +103,7 @@
 						</div>
 					</div>
 					
-					<!-- Informacion disparos restantes iteracion -->
+					<!-- Informacion disparos restantes iteracion -- >
 					<div class="col-xs-12">
 						<div class="panel panel-warning">
 							<div class="panel-heading">
@@ -122,7 +120,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					
 					<!-- Informacion fondos ganados en el juego -->
 					<div class="col-xs-12">
@@ -143,6 +141,10 @@
 						</div>
 					</div>
 
+					<!-- Grafico de resultados -->
+					<div class="col-xs-12" id="chartDiv">
+					</div> 
+					
 				</div>
 			</div>
 

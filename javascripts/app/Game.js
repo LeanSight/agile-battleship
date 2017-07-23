@@ -16,6 +16,8 @@ var Game = Backbone.Model.extend({
     this.sunken = 0;
     this.set("board", new Board());
     this.get("board").bind("fire", this.shotFired);
+    
+    ChartData.series[0].values = [[0,400]];
 
     var directions = ["vertical", "horizontal"];
 
@@ -63,9 +65,11 @@ var Game = Backbone.Model.extend({
       this.endGame();
     }
     
-    console.log("shot "+this.get("shotsRemainingForIteration")+
-                " budget $"+this.get("initialBudget")+
-                " funds $"+this.get("funds"));
+    var shotNumber = 40 - this.get("shotsRemainingForIteration");
+    var chartDisplayFunds = this.get("funds")/1000;
+    console.log("shot:"+ shotNumber + " funds $"+chartDisplayFunds);
+  
+    ChartData.series[0].values.push([shotNumber,chartDisplayFunds]);
   },
   sunkenBoat: function(boat) {
     this.sunken++;
@@ -104,11 +108,21 @@ var GameView = Backbone.View.extend({
   render: function() {
     this.boardView = new BoardView({model: this.model.get("board")});
     $("#boardcontainer").append(this.boardView.render().el);
+    
     this.updateShotsRemainingForGame();
     this.updateShotsRemainingForIteration();
     this.updateFunds();
     $("#endGameResult").html("");
     return this;
+  },
+  updateChart: function(){
+    var valueLen =  ChartData.series[0].values.length;
+    var lastvalue =  ChartData.series[0].values[ChartData.series[0].values.length-1];
+    console.log("updateChart: "+ lastvalue);
+    zingchart.render({
+      id: "chartDiv",
+      data: ChartData,
+    });    
   },
   updateShotsRemainingForGame: function() {
     $("#totalShotsRemaining").html(this.model.get("shotsRemainingForGame"));
@@ -119,6 +133,7 @@ var GameView = Backbone.View.extend({
   updateFunds: function() {
     var funds = this.model.get("funds");
     $("#funds").html(this.formatMoney(funds));
+    this.updateChart();
   },
   updateEndGameState: function(model, endGameState) {
     var diff = this.model.get("funds") - this.model.get("maxShots") * this.model.get("costPerShot");
