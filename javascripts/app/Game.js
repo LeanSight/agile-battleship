@@ -17,9 +17,7 @@ var Game = Backbone.Model.extend({
     this.set("board", new Board());
     this.get("board").bind("fire", this.shotFired);
 
-    ChartData.series[0].values = [
-      [0, 400]
-    ];
+    ChartData.series[0].values = [];
 
     var directions = ["vertical", "horizontal"];
 
@@ -123,11 +121,12 @@ var GameView = Backbone.View.extend({
     return this;
   },
   updateChart: function() {
-    var gameShots = this.model.get("shotsRemainingForGame");
+    var remainingShots = this.model.get("shotsRemainingForGame");
+    var gameShots = 40 - remainingShots;
     var iterationShots = this.model.get("shotsRemainingForIteration");
     var chartDisplayFunds = this.model.get("funds") / 1000;
     ChartData.series[0].values.push([gameShots, chartDisplayFunds]);
-    console.log("updateChart shot:" + gameShots + " iteration "+ iterationShots +" funds $" + chartDisplayFunds);
+    console.log("[" + gameShots + ","+ chartDisplayFunds+"]" );
     zingchart.render({
       id: "chartDiv",
       data: ChartData,
@@ -143,7 +142,6 @@ var GameView = Backbone.View.extend({
   updateFunds: function() {
     var funds = this.model.get("funds");
     $("#funds").html(this.formatMoney(funds));
-    console.log("updateFunds : "+funds);
     this.updateChart();
   },
   updateEndGameState: function(model, endGameState) {
