@@ -11,5 +11,5 @@ Ejecutar index.html y jugar!
 
 Creditos a 
 + Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond, inspired by  [battleship](https://github.com/zilverline/battleship)
-+ Mati Menich por su lifting con bootstartp
++ Mati Menich por su lifting con bootstrap
 + Agustin Villena por diseñar e integrar el grafico que ejemplifica el retorno de inversion
