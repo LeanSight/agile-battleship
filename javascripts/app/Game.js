@@ -12,36 +12,45 @@ var Game = Backbone.Model.extend({
     this.set("shotsRemainingForGame", this.get("maxShots"));
     this.set("funds", this.get("maxShots") * this.get("costPerShot"));
     this.set("initialBudget", this.get("funds"));
-    
+
     this.sunken = 0;
     this.set("board", new Board());
     this.get("board").bind("fire", this.shotFired);
-    
-    ChartData.series[0].values = [[0,400]];
+
+    ChartData.series[0].values = [
+      [0, 400]
+    ];
 
     var directions = ["vertical", "horizontal"];
 
     var self = this;
     var board = this.get("board");
-    if(this.get("fleet").length === 0) {
-      _(["aircraft-carrier","battleship","submarine","cruiser","destroyer"]).each(function(type) {
+    if (this.get("fleet").length === 0) {
+      _(["aircraft-carrier", "battleship", "submarine", "cruiser", "destroyer"]).each(function(type) {
         var placed = false;
-        while(!placed) {
-          var boat = new Boat({x: self.random(board.get("gridSize").x + 1), y: self.random(board.get("gridSize").y + 1), direction: directions[self.random(2)], type: type, visible: false});
-          if(board.validBoatPlacement(boat)) {
+        while (!placed) {
+          var boat = new Boat({
+            x: self.random(board.get("gridSize").x + 1),
+            y: self.random(board.get("gridSize").y + 1),
+            direction: directions[self.random(2)],
+            type: type,
+            visible: false
+          });
+          if (board.validBoatPlacement(boat)) {
             self.addBoat(boat);
             placed = true;
           }
         }
       });
-    } else {
+    }
+    else {
       _(this.get("fleet")).each(function(boat) {
         self.addBoat(boat);
       });
     }
   },
   random: function(max) {
-    return Math.floor(Math.random()*max);
+    return Math.floor(Math.random() * max);
   },
   destroy: function() {
     this.get("board").destroy();
@@ -60,21 +69,16 @@ var Game = Backbone.Model.extend({
       this.set("shotsRemainingForIteration", this.get("shotsPerIteration"));
       this.get("board").showFeedback();
     }
-
     if (this.get("shotsRemainingForGame") <= 0) {
       this.endGame();
     }
-    
-    var shotNumber = 40 - this.get("shotsRemainingForIteration");
-    var chartDisplayFunds = this.get("funds")/1000;
-    console.log("shot:"+ shotNumber + " funds $"+chartDisplayFunds);
-  
-    ChartData.series[0].values.push([shotNumber,chartDisplayFunds]);
+
+
   },
   sunkenBoat: function(boat) {
     this.sunken++;
     this.set("funds", this.get("funds") + boat.length() * this.get("sunkenBoatCellReward"));
-    if(this.fleetDestroyed() && this.get("shotsRemainingForGame") > 0) {
+    if (this.fleetDestroyed() && this.get("shotsRemainingForGame") > 0) {
       this.endGame();
     }
   },
@@ -85,7 +89,8 @@ var Game = Backbone.Model.extend({
     if (!this.has("endGameState")) {
       if (this.fleetDestroyed()) {
         this.set("endGameState", "win");
-      } else {
+      }
+      else {
         this.set("endGameState", "lose");
       }
       this.set("shotsRemainingForIteration", 0);
@@ -106,23 +111,28 @@ var GameView = Backbone.View.extend({
     this.model.bind("change:endGameState", this.updateEndGameState);
   },
   render: function() {
-    this.boardView = new BoardView({model: this.model.get("board")});
+    this.boardView = new BoardView({
+      model: this.model.get("board")
+    });
     $("#boardcontainer").append(this.boardView.render().el);
-    
+
     this.updateShotsRemainingForGame();
     this.updateShotsRemainingForIteration();
     this.updateFunds();
     $("#endGameResult").html("");
     return this;
   },
-  updateChart: function(){
-    var valueLen =  ChartData.series[0].values.length;
-    var lastvalue =  ChartData.series[0].values[ChartData.series[0].values.length-1];
-    console.log("updateChart: "+ lastvalue);
+  updateChart: function() {
+    var gameShots = this.model.get("shotsRemainingForGame");
+    var iterationShots = this.model.get("shotsRemainingForIteration");
+    var chartDisplayFunds = this.model.get("funds") / 1000;
+    ChartData.series[0].values.push([gameShots, chartDisplayFunds]);
+    console.log("updateChart shot:" + gameShots + " iteration "+ iterationShots +" funds $" + chartDisplayFunds);
     zingchart.render({
       id: "chartDiv",
       data: ChartData,
-    });    
+      height:400,
+    });
   },
   updateShotsRemainingForGame: function() {
     $("#totalShotsRemaining").html(this.model.get("shotsRemainingForGame"));
@@ -133,25 +143,31 @@ var GameView = Backbone.View.extend({
   updateFunds: function() {
     var funds = this.model.get("funds");
     $("#funds").html(this.formatMoney(funds));
+    console.log("updateFunds : "+funds);
     this.updateChart();
   },
   updateEndGameState: function(model, endGameState) {
     var diff = this.model.get("funds") - this.model.get("maxShots") * this.model.get("costPerShot");
     if (endGameState === "lose") { // No se destruyo toda la flota enemiga
-      console.log(diff);
-      if(diff > 0){
+      // console.log(diff);
+      if (diff > 0) {
         $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Ganaste ' + this.formatMoney(diff) + '</div>');
       }
-      else if(diff < 0){
+      else if (diff < 0) {
         $("#endGameResult").html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Perdiste ' + this.formatMoney(diff) + '</div>');
-      } else {
+      }
+      else {
         $("#endGameResult").html('<div class="alert alert-info alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-flag-checkered"></i> ¡Juego Finalizado!</strong> Mantuviste tu dinero</div>');
       }
-    } else { // Se destruyo toda la flota
+    }
+    else { // Se destruyo toda la flota
       $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-trophy"></i> ¡Has destruido la flota!</strong> Ganaste ' + this.formatMoney(diff) + '</div>');
     }
   },
   formatMoney: function(amount) {
-    return "US&dollar; " + $.formatNumber(amount, {format:"#,##0", locale:"nl"});
+    return "US&dollar; " + $.formatNumber(amount, {
+      format: "#,##0",
+      locale: "nl"
+    });
   }
 });
