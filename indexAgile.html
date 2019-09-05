@@ -48,8 +48,6 @@
 					<label for="shotsPerIteration">Disparos por iteración:&nbsp;1&nbsp;</label>
 					<div class="input-group">
 						<input type="hidden" min="1" max="1" value="1" id="shotsPerIteration" class="form-control" disabled>
-						<span class="input-group-btn">
-				        <button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
 				      </span>
 					</div>
 				</div>
@@ -59,14 +57,6 @@
 
 		<span id="endGameResult"></span>
 
-		<div class="row message">
-			<div class="col-xs-12 text-center">
-				<i class="fa fa-ship fa-5x animated pulse"></i>
-				<h2>Bienvenido</h2>
-				<p class="lead">Inicia un nuevo juego seleccionando el número de disparos por iteración</p>
-
-			</div>
-		</div>
 
 		<!-- Zona de despliegue de tablero e informacion -->
 		<div class="row vertical-align">
@@ -161,5 +151,16 @@
 		<p>Derivado de <a href="https://github.com/zilverline/battleship" target="_blank">Battleship</a> por Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond.<p>
 	</footer>
 </body>
+
+<script>
+		var game;
+		$(document).ready(function() {
+			if (game) {
+				game.destroy();
+			}
+			game = new Game({shotsPerIteration: $("#shotsPerIteration").val()});
+			new GameView({model: game}).render();
+		});
+	</script>
 
 </html>
