@@ -1,0 +1,165 @@
+<html>
+
+<head>
+	<title>Battleship</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script type="text/javascript" src="javascripts/ext/underscore.js"></script>
+	<script type="text/javascript" src="vendor/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="javascripts/ext/jshashtable-2.1.js"></script>
+	<script type="text/javascript" src="javascripts/ext/jquery.numeric.js"></script>
+	<script type="text/javascript" src="javascripts/ext/jquery.numberformatter.js"></script>
+	<script type="text/javascript" src="javascripts/ext/backbone.js"></script>
+	<script type="text/javascript" src="javascripts/ext/icanhaz.js"></script>
+	<script type="text/javascript" src="javascripts/ext/zingchart.min.js"></script>
+	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="javascripts/app/Boat.js"></script>
+	<script type="text/javascript" src="javascripts/app/Cell.js"></script>
+	<script type="text/javascript" src="javascripts/app/Board.js"></script>
+	<script type="text/javascript" src="javascripts/app/Game.js"></script>
+	<script type="text/javascript" src="javascripts/app/Chart.js"></script>
+
+	<script type="text/javascript" src="javascripts/boot.js"></script>
+
+	
+	<link href='https://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="vendor/animate.css">
+	<link rel="stylesheet" href="stylesheets/main.css" type="text/css" media="screen" charset="utf-8">
+
+	<script id="board" type="text/html">
+		<td>{{ name }}</td>
+	</script>
+</head>
+
+<body>
+	<div class="container">
+
+		<nav class="navbar navbar-default ">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand logo-text" href="#">Battleship - Batalla Naval - Versión Cascada</a>
+				</div>
+
+				<div class="navbar-form navbar-right" role="initGame">
+					<label for="shotsPerIteration">Disparos por iteración:&nbsp;40&nbsp;</label>
+					<div class="input-group">
+						<input type="hidden" min="40" max="40" value="40" id="shotsPerIteration" class="form-control" disabled>
+						<span class="input-group-btn">
+				        <button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
+				      </span>
+					</div>
+				</div>
+
+			</div>
+		</nav>
+
+		<span id="endGameResult"></span>
+
+		<div class="row message">
+			<div class="col-xs-12 text-center">
+				<i class="fa fa-ship fa-5x animated pulse"></i>
+				<h2>Bienvenido</h2>
+				<p class="lead">Inicia un nuevo juego seleccionando el número de disparos por iteración</p>
+
+			</div>
+		</div>
+
+		<!-- Zona de despliegue de tablero e informacion -->
+		<div class="row vertical-align">
+
+			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ">
+				<!-- Zona de despliegue de informacion -->
+				<div class="row stats animated fadeInRight hidden">
+					
+					<!-- Icono nave -->
+					<!--<div class="col-xs-12 text-center">-->
+					<!--	<i class="fa fa-ship fa-5x animated pulse"></i>-->
+					<!--	<h2></h2>-->
+					<!--</div>-->
+					
+					<!-- Informacion disparos restantes -->
+					<div class="col-xs-12">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-bullseye fa-3x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">
+											<span id="totalShotsRemaining"></span>
+										</div>
+										<div>Total de disparos restantes</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Informacion disparos restantes iteracion -->
+					<div class="col-xs-12">
+						<div class="panel panel-warning">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-retweet fa-3x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">
+											<span id="shotsRemainingForIteration"></span>
+										</div>
+										<div>Disparos restantes en la iteración</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Informacion fondos ganados en el juego -->
+					<div class="col-xs-12">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-money fa-3x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">
+											<span id="funds"></span>
+										</div>
+										<div>Balance restante</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Grafico de resultados -->
+					<div class="col-xs-12" >
+						<div class="row" id="chartDiv">
+						</div>
+					</div> 
+					
+				</div>
+			</div>
+
+			<!-- Tablero del Juego -->
+			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 text-center">
+				<div id="boardcontainer"></div>
+			</div>
+
+		</div>
+	</div>
+
+	<footer class="text-center">
+		Versión mejorada por<p><a href="http://www.leansight.com"><img src="images/leansight.png" width="150"></img></a>
+		<p>Desarrollo bootstrap por <a href="https://github.com/MatiMenich" target="_blank">Mati Menich</a>
+		<p>Derivado de <a href="https://github.com/zilverline/battleship" target="_blank">Battleship</a> por Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond.<p>
+	</footer>
+</body>
+
+</html>
