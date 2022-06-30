@@ -85,7 +85,7 @@ var CellView = Backbone.View.extend({
   },
   updateState: function() {
     if (this.model.get("state") == "hit") {
-      this.$el.html("<img class='hit marker animated bounceIn' src='images/1331900690_fire.png'/>");
+      this.$el.html("<img class='hit marker animated bounceIn' src='images/fire.svg'/>");
     } 
     else if (this.model.get("state") == "miss") {
       this.$el.html("<i class='miss marker animated flipInX fa fa-times fa-2x text-muted'></i>");
@@ -93,7 +93,7 @@ var CellView = Backbone.View.extend({
     }
   },
   fire: function() {
-    this.$el.html("<img class='target marker' src='images/1331901174_bullet_red.png'/>");
+    this.$el.html("<img class='target marker' src='images/coordenada.svg'/>");
     this.model.fire();
     this.$el.unbind("click");
   },
