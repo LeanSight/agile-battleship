@@ -4,15 +4,16 @@ footer {
 
 .board {
   border-collapse: collapse;
-  background-color: #d9edf7;
-	color: #333;
+  background-color: solid white;
 }
 
 .cell {
   border-top: 1px solid #34748f;
   border-left: 1px solid #34748f;
   border-right: 1px solid #34748f;
+  background-color: #d9edf7;
   border-bottom: 1px solid #34748f;
+  
   text-align: center;
   min-width: 40px;
   position: relative;
@@ -246,19 +247,6 @@ footer {
   border: 2px solid #000000; /* Black */
 }
 
-/*
-.cell {
-  border-top: 1px solid #34748f;
-  border-left: 1px solid #34748f;
-  border-right: 1px solid #34748f;
-  border-bottom: 1px solid #34748f;
-  text-align: center;
-  min-width: 40px;
-  position: relative;
-  padding: 0;
-  margin: 0;
-}
-*/
 
 
 .grayscale .cell-hover {
