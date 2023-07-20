@@ -3,8 +3,46 @@ var Game = Backbone.Model.extend({
     shotsPerIteration: 40,
     maxShots: 40,
     costPerShot: 10000,
-    sunkenBoatCellReward: 50000,
-    fleet: []
+    sunkenBoatCellReward: 50000 
+  },
+  setRandomFleet: function() {
+    var self = this;
+    var board = this.get("board");
+    var directions = ["vertical", "horizontal"];
+  
+    _(Fleet.boatTypes).each(function(type){
+      var placed = false;
+      while (!placed) {
+        var boat = new Boat({
+          x: self.random(board.get("gridSize").x + 1),
+          y: self.random(board.get("gridSize").y + 1),
+          direction: directions[self.random(2)],
+          type: type,
+          visible: true
+        });
+        if (board.validBoatPlacement(boat)) {
+          self.addBoat(boat);
+          placed = true;
+        }
+      }
+    });
+  },
+  setFixedFleet: function(board, fleetData) {
+    var self = this;
+    _(fleetData).each(function(data) {
+        var boat = new Boat({
+            x: data.x,
+            y: data.y,
+            direction: data.direction,
+            type: data.type,
+            visible: false
+        });
+        if (board.validBoatPlacement(boat)) {
+            self.addBoat(boat); // Here we are using Game's addBoat method.
+        } else {
+            throw new Error("Invalid boat placement for boat: " + data.type);
+        }
+    });
   },
   initialize: function(args) {
     _.bindAll(this, "sunkenBoat", "shotFired");
@@ -15,37 +53,18 @@ var Game = Backbone.Model.extend({
 
     this.sunken = 0;
     this.set("board", new Board());
-    this.get("board").bind("fire", this.shotFired);
+    var board = this.get("board");
+    board.bind("fire", this.shotFired);
 
     ChartData.series[0].values = [];
 
-    var directions = ["vertical", "horizontal"];
+    if (args.fleet.length == 0 ) 
+    {
+      this.setRandomFleet(board);
+    } else {
+      this.setFixedFleet(board, args.fleet);  
+    }
 
-    var self = this;
-    var board = this.get("board");
-    if (this.get("fleet").length === 0) {
-      _(["aircraft-carrier", "battleship", "submarine", "cruiser", "destroyer"]).each(function(type) {
-        var placed = false;
-        while (!placed) {
-          var boat = new Boat({
-            x: self.random(board.get("gridSize").x + 1),
-            y: self.random(board.get("gridSize").y + 1),
-            direction: directions[self.random(2)],
-            type: type,
-            visible: false
-          });
-          if (board.validBoatPlacement(boat)) {
-            self.addBoat(boat);
-            placed = true;
-          }
-        }
-      });
-    }
-    else {
-      _(this.get("fleet")).each(function(boat) {
-        self.addBoat(boat);
-      });
-    }
   },
   random: function(max) {
     return Math.floor(Math.random() * max);
@@ -55,6 +74,7 @@ var Game = Backbone.Model.extend({
     Game.__super__.destroy();
   },
   addBoat: function(boat) {
+    console.log(boat.toString())
     boat.bind("sunken", this.sunkenBoat);
     this.get("board").addBoat(boat);
   },

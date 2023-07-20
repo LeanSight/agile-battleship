@@ -1,59 +1,105 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-	<title>Battleship</title>
-	<meta charset="utf-8" />
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Battleship</title>
 
-	<script type="text/javascript" src="javascripts/ext/underscore.js"></script>
-	<script type="text/javascript" src="vendor/jquery-1.11.3.min.js"></script>
-	<script type="text/javascript" src="javascripts/ext/jshashtable-2.1.js"></script>
-	<script type="text/javascript" src="javascripts/ext/jquery.numeric.js"></script>
-	<script type="text/javascript" src="javascripts/ext/jquery.numberformatter.js"></script>
-	<script type="text/javascript" src="javascripts/ext/backbone.js"></script>
-	<script type="text/javascript" src="javascripts/ext/icanhaz.js"></script>
-	<script type="text/javascript" src="javascripts/ext/zingchart.min.js"></script>
-	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-	<script type="text/javascript" src="javascripts/app/Boat.js"></script>
-	<script type="text/javascript" src="javascripts/app/Cell.js"></script>
-	<script type="text/javascript" src="javascripts/app/Board.js"></script>
-	<script type="text/javascript" src="javascripts/app/Game.js"></script>
-	<script type="text/javascript" src="javascripts/app/Chart.js"></script>
-
-	<script type="text/javascript" src="javascripts/boot.js"></script>
-
-	
-	<link href='https://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
+	<!-- CSS -->
+	<link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
 	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="vendor/animate.css">
-	<link rel="stylesheet" href="stylesheets/main.css" type="text/css" media="screen" charset="utf-8">
+	<link rel="stylesheet" href="stylesheets/main.css">
+
+	<!-- JavaScript -->
+	<script src="javascripts/ext/underscore.js"></script>
+	<script src="vendor/jquery-1.11.3.min.js"></script>
+	<script src="javascripts/ext/jshashtable-2.1.js"></script>
+	<script src="javascripts/ext/jquery.numeric.js"></script>
+	<script src="javascripts/ext/jquery.numberformatter.js"></script>
+	<script src="javascripts/ext/backbone.js"></script>
+	<script src="javascripts/ext/icanhaz.js"></script>
+	<script src="javascripts/ext/zingchart.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="javascripts/app/Boat.js"></script>
+	<script src="javascripts/app/Cell.js"></script>
+	<script src="javascripts/app/Board.js"></script>
+	<script src="javascripts/app/Game.js"></script>
+	<script src="javascripts/app/Chart.js"></script>
+	<script src="javascripts/app/Fleet.js"></script>
+	<script src="javascripts/boot.js"></script>
 
 	<script id="board" type="text/html">
 		<td>{{ name }}</td>
 	</script>
+
+	<script>
+		// Parse URL parameters
+		const urlParams = new URLSearchParams(window.location.search);
+		const simulation = urlParams.get('simulation');
+		const fixedFleet = urlParams.get('fixedfleet') === 'true';
+		
+		let gameTitle;
+		let shotsPerIteration;
+		let inputVisibility = 'visible';
+		
+		switch(simulation) {
+			case 'agile':
+				gameTitle = 'Battleship - Batalla Naval Ágil';
+				shotsPerIteration = 1;
+				inputVisibility = 'hidden';
+				break;
+			case 'waterfall':
+				gameTitle = 'Battleship - Batalla Naval Cascada';
+				shotsPerIteration = 40;
+				inputVisibility = 'hidden';
+				break;
+			default:
+				gameTitle = 'Battleship - Batalla Naval';
+				shotsPerIteration = 40;
+		}
+		
+		document.addEventListener('DOMContentLoaded', function() {
+			// Set the game title
+			document.querySelector('.navbar-brand').textContent = gameTitle;
+		
+			// Set shots per iteration and visibility
+			const shotsInput = document.getElementById('shotsPerIteration');
+			const shotsLabel = document.querySelector("label[for='shotsPerIteration']");
+			shotsInput.value = shotsPerIteration;
+			shotsInput.style.visibility = inputVisibility;
+			shotsLabel.style.visibility = inputVisibility;
+		
+			// If simulation mode, start game automatically
+			if (simulation === 'agile' || simulation === 'waterfall') {
+				document.getElementById('newGame').click();
+			}
+		});
+		
+		// Pass the 'fixedFleet' variable to the global window object
+		// If is true, the game will be use a fixed fleet in the board defined in boot.js
+		window.fixedFleet = fixedFleet;
+	</script>
+	
 </head>
 
 <body>
 	<div class="container">
-
-		<nav class="navbar navbar-default ">
+		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand logo-text" href="#">Battleship - Batalla Naval</a>
 				</div>
-
 				<div class="navbar-form navbar-right" role="initGame">
-					<label for="shotsPerIteration">Disparos por iteración:&nbsp;</label>
+					<label for="shotsPerIteration">Disparos por iteración:</label>
 					<div class="input-group">
 						<input type="number" min="1" max="40" value="40" id="shotsPerIteration" class="form-control">
 						<span class="input-group-btn">
-				        <button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
-				      </span>
+							<button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
+						</span>
 					</div>
 				</div>
-
 			</div>
 		</nav>
 
@@ -64,24 +110,12 @@
 				<i class="fa fa-ship fa-5x animated pulse"></i>
 				<h2>Bienvenido</h2>
 				<p class="lead">Inicia un nuevo juego seleccionando el número de disparos por iteración</p>
-
 			</div>
 		</div>
 
-		<!-- Zona de despliegue de tablero e informacion -->
 		<div class="row vertical-align">
-
-			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ">
-				<!-- Zona de despliegue de informacion -->
+			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<div class="row stats animated fadeInRight hidden">
-					
-					<!-- Icono nave -->
-					<!--<div class="col-xs-12 text-center">-->
-					<!--	<i class="fa fa-ship fa-5x animated pulse"></i>-->
-					<!--	<h2></h2>-->
-					<!--</div>-->
-					
-					<!-- Informacion disparos restantes -->
 					<div class="col-xs-12">
 						<div class="panel panel-info">
 							<div class="panel-heading">
@@ -99,8 +133,6 @@
 							</div>
 						</div>
 					</div>
-					
-					<!-- Informacion disparos restantes iteracion -->
 					<div class="col-xs-12">
 						<div class="panel panel-warning">
 							<div class="panel-heading">
@@ -118,8 +150,6 @@
 							</div>
 						</div>
 					</div>
-					
-					<!-- Informacion fondos ganados en el juego -->
 					<div class="col-xs-12">
 						<div class="panel panel-success">
 							<div class="panel-heading">
@@ -137,28 +167,22 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Grafico de resultados -->
-					<div class="col-xs-12" >
+					<div class="col-xs-12">
 						<div class="row" id="chartDiv">
 						</div>
-					</div> 
-					
+					</div>
 				</div>
 			</div>
-
-			<!-- Tablero del Juego -->
 			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 text-center">
 				<div id="boardcontainer"></div>
 			</div>
-
 		</div>
 	</div>
 
 	<footer class="text-center">
-		Versión mejorada por<p><a href="http://www.leansight.com"><img src="images/leansight.svg" width="150"></img></a>
-		<p>Desarrollo bootstrap por <a href="https://github.com/MatiMenich" target="_blank">Mati Menich</a>
-		<p>Derivado de <a href="https://github.com/zilverline/battleship" target="_blank">Battleship</a> por Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond.<p>
+		<p>Versión mejorada por <a href="http://www.leansight.com"><img src="images/leansight.svg" width="150" alt="leansight"></a></p>
+		<p>Desarrollo bootstrap por <a href="https://github.com/MatiMenich" target="_blank">Mati Menich</a></p>
+		<p>Derivado de <a href="https://github.com/zilverline/battleship" target="_blank">Battleship</a> por Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond.</p>
 	</footer>
 </body>
 
