@@ -18,7 +18,7 @@ var Game = Backbone.Model.extend({
           y: self.random(board.get("gridSize").y + 1),
           direction: directions[self.random(2)],
           type: type,
-          visible: true
+          visible: false
         });
         if (board.validBoatPlacement(boat)) {
           self.addBoat(boat);
