@@ -39,6 +39,7 @@
 		const urlParams = new URLSearchParams(window.location.search);
 		const simulation = urlParams.get('simulation');
 		const fixedFleet = urlParams.get('fixedfleet') === 'true';
+		const grayscale = urlParams.get('grayscale') === 'true';
 		
 		let gameTitle;
 		let shotsPerIteration;
@@ -80,6 +81,25 @@
 		// Pass the 'fixedFleet' variable to the global window object
 		// If is true, the game will be use a fixed fleet in the board defined in boot.js
 		window.fixedFleet = fixedFleet;
+
+		// The $(document).ready() function ensures the code inside it runs after the entire HTML document has loaded.
+		$(document).ready(function() {
+			// If the grayscale parameter is present, show the toggle button.
+			// Otherwise, hide it.
+			if (urlParams.has('grayscale')) {
+			$('#toggleColorMode').show();
+			} else {
+			$('#toggleColorMode').hide();
+			}
+			// If the grayscale parameter is true, add the "grayscale" class to the body element.
+			if (grayscale) {
+				$('body').addClass('grayscale');
+			}
+			// This is the JavaScript code that toggles grayscale mode.
+			$('#toggleColorMode').click(function() {
+				$('body').toggleClass('grayscale');
+			});
+		});
 	</script>
 	
 </head>
@@ -98,6 +118,9 @@
 						<span class="input-group-btn">
 							<button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
 						</span>
+					</div>
+					<div class="grayscale-group">
+						<button id="toggleColorMode" class="btn btn-primary" type="button">Toggle Color Mode</button>
 					</div>
 				</div>
 			</div>

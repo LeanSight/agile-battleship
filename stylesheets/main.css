@@ -65,7 +65,6 @@ footer {
 	font-size: 24px;
 }
 
-*//**/
 .cell-title-bottom {
   border-top: 1px solid #bce8f1;
   border-left: 1px solid white;
@@ -212,4 +211,97 @@ footer {
 .miss-cell {
   background-color: #e3e3e3;
   border-color: #e3e3e3;
+}
+
+
+/* Código para versión en escala de grises, printer friendly */
+
+.grayscale .showBoat.aircraft-carrier {
+  background-color: #666666; /* Medium Gray */
+  border: 1px solid #666666; /* Medium Gray */
+}
+
+.grayscale .showBoat.battleship {
+  background-color:  #999999; /* Light Gray */
+  border: 1px solid #999999; /* Light Gray */
+}
+
+.grayscale .showBoat.submarine {
+  background-color: #333333; /* Dark Gray */
+  border: 1px solid #333333; /* Dark Gray */
+}
+
+.grayscale .showBoat.cruiser {
+  background-color: #bbbbbb; /* Very Light Gray */
+  border: 1px solid #bbbbbb; /* Very Light Gray */
+}
+
+.grayscale .showBoat.destroyer {
+  background-color: #444444; /* Very Dark Gray */
+  border: 1px solid #444444; /* Very Dark Gray */
+}
+
+.grayscale .cell {
+  background-color: #FFFFFF; /* White */
+  border: 2px solid #000000; /* Black */
+}
+
+/*
+.cell {
+  border-top: 1px solid #34748f;
+  border-left: 1px solid #34748f;
+  border-right: 1px solid #34748f;
+  border-bottom: 1px solid #34748f;
+  text-align: center;
+  min-width: 40px;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+*/
+
+
+.grayscale .cell-hover {
+  background-color: #000000;
+}
+
+
+.grayscale .cell-title-top {
+  border-top: 1px solid white !important;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  
+  background-color: white;
+  text-align: center;
+	color: #333;
+	font-size: 24px;
+}
+
+.grayscale .cell-title-left {
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  
+  background-color: white;
+  text-align: center;
+	color: #333;
+  min-width: 10px;
+	font-size: 24px;
+}
+
+.grayscale .cell-title-hover {
+  background-color: #000000; 
+  color: white;
+}
+
+.grayscale .cell-title-left-hover {
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  
+  background-color:  #000000;
+  text-align: center;
+	color: white;
+  min-width: 10px;
+	font-size: 24px;
 }
