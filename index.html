@@ -8,7 +8,6 @@
 	<!-- CSS -->
 	<link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
 	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="vendor/animate.css">
 	<link rel="stylesheet" href="stylesheets/main.css">
 
@@ -28,11 +27,15 @@
 	<script src="javascripts/app/Game.js"></script>
 	<script src="javascripts/app/Chart.js"></script>
 	<script src="javascripts/app/Fleet.js"></script>
+    <script src="javascripts/app/StatusPanel.js"></script>
 	<script src="javascripts/boot.js"></script>
 
 	<script id="board" type="text/html">
 		<td>{{ name }}</td>
 	</script>
+
+	<!-- Include the StatusPanel class definition here -->
+	<script src="javascripts/app/StatusPanel.js"></script>
 
 	<script>
 		// Parse URL parameters
@@ -76,6 +79,7 @@
 			if (simulation === 'agile' || simulation === 'waterfall') {
 				document.getElementById('newGame').click();
 			}
+
 		});
 		
 		// Pass the 'fixedFleet' variable to the global window object
@@ -99,114 +103,91 @@
 			$('#toggleColorMode').click(function() {
 				$('body').toggleClass('grayscale');
 			});
+
+            var totalShotsPanel = new StatusPanel({
+                panelClass: 'panel-info',
+                iconSrc: 'images/missile.svg',
+                spanId: 'totalShotsRemaining',
+                description: 'Total de disparos restantes'
+            });
+            $(".stats").append(totalShotsPanel.render().$el);
+
+            var shotsRemainingPanel = new StatusPanel({
+                panelClass: 'panel-warning',
+                iconSrc: 'images/cycle.svg',
+                spanId: 'shotsRemainingForIteration',
+                description: 'Disparos restantes en la iteración'
+            });
+            $(".stats").append(shotsRemainingPanel.render().$el);
+
+            var fundsPanel = new StatusPanel({
+                panelClass: 'panel-success',
+                iconSrc: 'images/profit.svg',
+                spanId: 'funds',
+                description: 'Balance restante'
+            });
+            $(".stats").append(fundsPanel.render().$el);
+            // Create the div for the chart and add it to the stats div
+            var chartDiv = $('<div>').addClass('col-xs-12').append($('<div>').addClass('row').attr('id', 'chartDiv'));
+            $(".stats").append(chartDiv);
+                    
 		});
 	</script>
 	
 </head>
 
 <body>
-	<div class="container">
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand logo-text" href="#">Battleship - Batalla Naval</a>
-				</div>
-				<div class="navbar-form navbar-right" role="initGame">
-					<label for="shotsPerIteration">Disparos por iteración:</label>
-					<div class="input-group">
-						<input type="number" min="1" max="40" value="40" id="shotsPerIteration" class="form-control">
-						<span class="input-group-btn">
-							<button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
-						</span>
-					</div>
-					<div class="grayscale-group">
-						<button id="toggleColorMode" class="btn btn-primary" type="button">Toggle Color Mode</button>
-					</div>
-				</div>
-			</div>
-		</nav>
-
-		<span id="endGameResult"></span>
-
-		<div class="row message">
-			<div class="col-xs-12 text-center">
-				<i class="fa fa-ship fa-5x animated pulse"></i>
-				<h2>Bienvenido</h2>
-				<p class="lead">Inicia un nuevo juego seleccionando el número de disparos por iteración</p>
-			</div>
-		</div>
-
-		<div class="row vertical-align">
-			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-				<div class="row stats animated fadeInRight hidden">
-					<div class="col-xs-12">
-						<div class="panel panel-info">
-							<div class="panel-heading">
-								<div class="row">
-									<div class="col-xs-3">
-										<i class="fa fa-bullseye fa-3x"></i>
-									</div>
-									<div class="col-xs-9 text-right">
-										<div class="huge">
-											<span id="totalShotsRemaining"></span>
-										</div>
-										<div>Total de disparos restantes</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12">
-						<div class="panel panel-warning">
-							<div class="panel-heading">
-								<div class="row">
-									<div class="col-xs-3">
-										<i class="fa fa-retweet fa-3x"></i>
-									</div>
-									<div class="col-xs-9 text-right">
-										<div class="huge">
-											<span id="shotsRemainingForIteration"></span>
-										</div>
-										<div>Disparos restantes en la iteración</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12">
-						<div class="panel panel-success">
-							<div class="panel-heading">
-								<div class="row">
-									<div class="col-xs-3">
-										<i class="fa fa-money fa-3x"></i>
-									</div>
-									<div class="col-xs-9 text-right">
-										<div class="huge">
-											<span id="funds"></span>
-										</div>
-										<div>Balance restante</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12">
-						<div class="row" id="chartDiv">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 text-center">
-				<div id="boardcontainer"></div>
-			</div>
-		</div>
-	</div>
-
-	<footer class="text-center">
-		<p>Versión mejorada por <a href="http://www.leansight.com"><img src="images/leansight.svg" width="150" alt="leansight"></a></p>
-		<p>Desarrollo bootstrap por <a href="https://github.com/MatiMenich" target="_blank">Mati Menich</a></p>
-		<p>Derivado de <a href="https://github.com/zilverline/battleship" target="_blank">Battleship</a> por Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond.</p>
-	</footer>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand logo-text" href="#">Battleship - Batalla Naval</a>
+                    </div>
+                    <div class="navbar-form navbar-right" role="initGame">
+                        <label for="shotsPerIteration">Disparos por iteración:</label>
+                        <div class="input-group">
+                            <input type="number" min="1" max="40" value="40" id="shotsPerIteration" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" id="newGame">Empezar un juego nuevo</button>
+                            </span>
+                        </div>
+                        <div class="grayscale-group">
+                            <button id="toggleColorMode" class="btn btn-primary" type="button">Toggle Color Mode</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+    
+            <span id="endGameResult"></span>
+    
+            <div class="row message">
+                <div class="col-xs-12 text-center">
+					<img src="images/war-ship.svg" width="200">
+                    <h2>Bienvenido</h2>
+                    <p class="lead">Inicia un nuevo juego seleccionando el número de disparos por iteración</p>
+                </div>
+            </div>
+    
+            <div class="row vertical-align">
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="row stats animated fadeInRight hidden">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 text-center">
+                    <div id="boardcontainer"></div>
+                </div>
+    
+            </div>
+        </div>
+    
+        <footer class="text-center">
+            <p>Versión mejorada por <a href="http://www.leansight.com"><img src="images/leansight.svg" width="150" alt="leansight"></a></p>
+            <p>Desarrollo bootstrap por <a href="https://github.com/MatiMenich" target="_blank">Mati Menich</a></p>
+            <p>Derivado de <a href="https://github.com/zilverline/battleship" target="_blank">Battleship</a> por Zilverline / Daniël van Hoesel, Bob Forma, Mark Suurmond.</p>
+        </footer>
+    </body>
+    
 </body>
 
 </html>

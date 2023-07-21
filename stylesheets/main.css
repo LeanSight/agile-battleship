@@ -2,6 +2,10 @@ footer {
   z-index: 1030;
 }
 
+.status-icon-svg {
+  max-width: 80px;
+}
+
 .board {
   border-collapse: collapse;
   background-color: solid white;
@@ -66,28 +70,6 @@ footer {
 	font-size: 24px;
 }
 
-.cell-title-bottom {
-  border-top: 1px solid #bce8f1;
-  border-left: 1px solid white;
-	border-right: 1px solid white;
-  border-bottom: 1px solid white;
-  background-color: white;
-  text-align: center;
-	color: #333;
-	font-size: 24px;
-}
-
-.cell-title-right {
-  border-top: 1px solid white;
-  border-left: 1px solid #bce8f1;
-	border-right: 1px solid white;
-  border-bottom: 1px solid white;
-  background-color: white;
-  text-align: center;
-	color: #333;
-	font-size: 24px;
-}
-
 .showBoat.aircraft-carrier {
     background-color: #e74c3c;
     border: 1px solid #e74c3c;
@@ -121,9 +103,6 @@ footer {
   text-align: center;
 }
 
-.huge {
-  font-size: 20px;
-}
 
 @media(min-width:768px){
   .vertical-align {
@@ -201,8 +180,14 @@ footer {
   animation-delay: .2s;
 }
 
+.logo-text-small {
+  font-family: 'Russo One', sans-serif;
+  font-size: 20px;
+}
+
 .logo-text {
   font-family: 'Russo One', sans-serif;
+  font-size: 30px;
 }
 
 .navbar-brand {

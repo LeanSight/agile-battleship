@@ -43,16 +43,17 @@ var CellView = Backbone.View.extend({
   render: function() {
 		this.$el.attr("id", this.id);
 
-		if(this.cell_x > 10){
-			this.disable();
-			this.$el.addClass("cell-title-right");
-		}
+		// if(this.cell_x > 10){
+		// 	this.disable();
+		// 	this.$el.addClass("cell-title-right ");
+		// }
 		
-		if(this.cell_y > 10){
-			this.disable();
-			this.$el.addClass("cell-title-bottom");
-		}
+		// if(this.cell_y > 10){
+		// 	this.disable();
+		// 	this.$el.addClass("cell-title-bottom");
+		// }
 		
+    // fila superior con los números
 		if(this.cell_y === 0) {
 			this.disable();
 			this.$el.addClass("cell-title-top");
@@ -61,6 +62,7 @@ var CellView = Backbone.View.extend({
 			}
 		}
 
+    // primera columna con las letras
 		var A_charcode = "A".charCodeAt(0);
 		if(this.cell_x === 0) {
 			this.disable();
