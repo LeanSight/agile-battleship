@@ -29,7 +29,19 @@ footer {
   background-color: #34748f;
 }
 
+.cell-header { 
+  background-color: white;
+  text-align: center;
+	color: #333;
+	font-size: 24px;
+}
 
+.cell-header-hover {
+  background-color: #34748f; 
+  color: white;
+}
+
+/* 
 .cell-title-top {
   border-top: 1px solid white !important;
   border-left: 1px solid white;
@@ -68,7 +80,7 @@ footer {
 	color: white;
   min-width: 10px;
 	font-size: 24px;
-}
+} */
 
 .showBoat.aircraft-carrier {
     background-color: #e74c3c;
@@ -227,13 +239,15 @@ footer {
   border: 2px solid #000000; /* Black */
 }
 
-
-
 .grayscale .cell-hover {
   background-color: #000000;
 }
 
+.grayscale .cell-header-hover {
+  background-color: #000000;
+}
 
+/* 
 .grayscale .cell-title-top {
   border-top: 1px solid white !important;
   border-left: 1px solid white;
@@ -272,4 +286,4 @@ footer {
 	color: white;
   min-width: 10px;
 	font-size: 24px;
-}
+} */

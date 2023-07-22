@@ -82,14 +82,14 @@ var CellView = AbstractCellView.extend({
     // fila superior con los números
 		if(this.cell_y === 0) {
 			this.disable();
-			this.$el.addClass("cell-title-top");
+			this.$el.addClass("cell-header");
       this.$el.html(this.model.text);
 		}
 
     // primera columna con las letras
 		if(this.cell_x === 0) {
 			this.disable();
-			this.$el.addClass("cell-title-left");
+			this.$el.addClass("cell-header");
       this.$el.html(this.model.text);
 		}
     this.renderBoat();
@@ -133,8 +133,8 @@ var CellView = AbstractCellView.extend({
 		  var row_header_id   = this.build_cell_id(0,this.cell_y);
   		var row_header_cell = this.$el.closest('table').find("#"+row_header_id);
 
-      column_header_cell.toggleClass("cell-title-hover",doHighlight);
-  		row_header_cell.toggleClass("cell-title-left-hover",doHighlight);
+      column_header_cell.toggleClass("cell-header-hover",doHighlight);
+  		row_header_cell.toggleClass("cell-header-hover",doHighlight);
   },
   mouseOverCell: function(){
     if(this.in_board){
