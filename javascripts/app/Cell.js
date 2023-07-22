@@ -37,22 +37,16 @@ var CellView = AbstractCellView.extend({
     "mouseover": "mouseOverCell",
     "mouseleave": "mouseLeaveCell",
   },
-  // build_cell_id: function(val_x,val_y){
-  //   return "cell-" + val_x + "-" + val_y;
-  // },
   initialize: function() {
     AbstractCellView.prototype.initialize.call(this);
     _.bindAll(this, "renderBoat", "updateState", "disable");
     this.model.bind("change:boat", this.renderBoat);
     this.model.bind("change:state", this.updateState);
     this.model.bind("change:disabled", this.disable);
-		// this.cell_x = this.model.get("x");
-		// this.cell_y = this.model.get("y");
 		
 		this.in_header = this.cell_x==0 || this.cell_y==0;
 		this.in_board  = !this.in_header && this.cell_x<=10 && this.cell_y<=10;
-		// this.id = this.build_cell_id(this.cell_x, this.cell_y);
-  },
+	},
 
   render: function() {
 		this.$el.attr("id", this.id);
