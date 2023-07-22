@@ -3,7 +3,7 @@ footer {
 }
 
 .status-icon-svg {
-  max-width: 80px;
+  max-width: 60px;
 }
 
 .board {
@@ -180,14 +180,9 @@ footer {
   animation-delay: .2s;
 }
 
-.logo-text-small {
-  font-family: 'Russo One', sans-serif;
-  font-size: 20px;
-}
-
 .logo-text {
   font-family: 'Russo One', sans-serif;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .navbar-brand {

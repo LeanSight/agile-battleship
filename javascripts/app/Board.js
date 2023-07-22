@@ -5,15 +5,18 @@ var Board = Backbone.Model.extend({
       y: 11
     }
   },
-  initialize: function(args) {
+  initialize: function (args)
+  {
     this.fleet = [];
     this.grid = [];
     this.targets = [];
     _.bindAll(this, "fire");
 
-    for (var y = 0; y < this.get('gridSize').y; y++) {
+    for (var y = 0; y < this.get('gridSize').y; y++)
+    {
       this.grid[y] = [];
-      for (var x = 0; x < this.get('gridSize').x; x++) {
+      for (var x = 0; x < this.get('gridSize').x; x++)
+      {
         var cell = new Cell({
           x: x,
           y: y
@@ -23,54 +26,70 @@ var Board = Backbone.Model.extend({
       }
     }
   },
-  getGrid: function() {
+  getGrid: function ()
+  {
     return this.grid;
   },
-  getCell: function(x, y) {
-    if (this.grid[y] === undefined) {
+  getCell: function (x, y)
+  {
+    if (this.grid[y] === undefined)
+    {
       return undefined;
     }
-    else {
+    else
+    {
       return this.grid[y][x];
     }
   },
-  fire: function(cell) {
+  fire: function (cell)
+  {
     this.targets.push(cell);
 
     this.trigger("fire");
   },
-  showFeedback: function() {
-    _(this.targets).each(function(cell) {
+  showFeedback: function ()
+  {
+    _(this.targets).each(function (cell)
+    {
       cell.updateState();
     });
     this.targets = [];
   },
-  addBoat: function(boat) {
+  addBoat: function (boat)
+  {
     this.fleet.push(boat);
     var cells = this.getCellsForBoat(boat);
     boat.setCells(cells);
     this.trigger("add:boat", boat);
   },
-  getCellsForBoat: function(boat) {
+  getCellsForBoat: function (boat)
+  {
     var cells = [];
-    if (boat.get("direction") === "horizontal") {
-      for (var i = boat.get("x"); i < boat.get("x") + boat.length(); i++) {
+    if (boat.get("direction") === "horizontal")
+    {
+      for (var i = boat.get("x"); i < boat.get("x") + boat.length(); i++)
+      {
         cells.push(this.getCell(i, boat.get("y")));
       }
     }
-    else {
-      for (var i = boat.get("y"); i < boat.get("y") + boat.length(); i++) {
+    else
+    {
+      for (var i = boat.get("y"); i < boat.get("y") + boat.length(); i++)
+      {
         cells.push(this.getCell(boat.get("x"), i));
       }
     }
     return cells;
   },
-  validBoatPlacement: function(boat) {
+  validBoatPlacement: function (boat)
+  {
     var self = this;
     var cells = this.getCellsForBoat(boat);
     return !_(cells).any(
-      function(cell) {
-        if (!cell) {
+      function (cell)
+      {
+        if (!cell)
+        {
           return true;
         }
         var edgeCells = [];
@@ -81,7 +100,8 @@ var Board = Backbone.Model.extend({
         edgeCells.push(self.getCell(cell.get("x"), cell.get("y") - 1));
 
         return _(edgeCells).any(
-          function(cell) {
+          function (cell)
+          {
             return cell === undefined || cell.has("boat");
           }
         );
@@ -89,19 +109,25 @@ var Board = Backbone.Model.extend({
       }
     );
   },
-  fleetSize: function() {
+  fleetSize: function ()
+  {
     return this.fleet.length;
   },
-  disable: function() {
+  disable: function ()
+  {
     this.set("disabled", true);
-    for (var y = 0; y < this.get('gridSize').y; y++) {
-      for (var x = 0; x < this.get('gridSize').x; x++) {
+    for (var y = 0; y < this.get('gridSize').y; y++)
+    {
+      for (var x = 0; x < this.get('gridSize').x; x++)
+      {
         this.grid[y][x].set("disabled", true);
       }
     }
   },
-  showFleet: function() {
-    _(this.fleet).each(function(boat) {
+  showFleet: function ()
+  {
+    _(this.fleet).each(function (boat)
+    {
       boat.set("visible", true);
     });
   }
@@ -110,18 +136,23 @@ var Board = Backbone.Model.extend({
 var BoardView = Backbone.View.extend({
   tagName: "table",
   className: "board table table-responsive animated fadeInUp",
-  initialize: function() {
+  initialize: function ()
+  {
     _.bindAll(this, "removeBoard");
     this.model.bind("destroy", this.removeBoard);
   },
-  removeBoard: function() {
+  removeBoard: function ()
+  {
     this.remove();
   },
-  render: function() {
+  render: function ()
+  {
     var self = this;
-    _(this.model.getGrid()).each(function(row) {
+    _(this.model.getGrid()).each(function (row)
+    {
       var tr = $("<tr />");
-      _(row).each(function(cell) {
+      _(row).each(function (cell)
+      {
         tr.append(new CellView({
           model: cell
         }).render().el);

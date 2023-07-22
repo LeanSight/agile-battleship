@@ -19,14 +19,16 @@ var StatusPanel = Backbone.View.extend({
         '</div>'
     ),
 
-    initialize: function(options) {
+    initialize: function (options)
+    {
         this.panelClass = options.panelClass;
         this.iconSrc = options.iconSrc;
         this.spanId = options.spanId;
         this.description = options.description;
     },
 
-    render: function() {
+    render: function ()
+    {
         this.$el.html(this.template({
             panelClass: this.panelClass,
             iconSrc: this.iconSrc,

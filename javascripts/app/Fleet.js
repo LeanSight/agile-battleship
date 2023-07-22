@@ -1,7 +1,9 @@
 // Fleet.js
 
-var Fleet = {
-  boatLengths: {
+var Fleet = 
+{
+  boatLengths: 
+  {
     "aircraft-carrier": 5,
     "battleship": 4,
     "submarine": 3,
