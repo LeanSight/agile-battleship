@@ -7,7 +7,7 @@ var Board = Backbone.Model.extend({
   },
   createCell: function (x, y)
   {
-    if (y == 0)
+    if (y == 0 || x==0)
     {
       return new CellHeader({
         x: x,
