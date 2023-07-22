@@ -5,26 +5,42 @@ var Board = Backbone.Model.extend({
       y: 11
     }
   },
+  createCell: function (x, y)
+  {
+    if (y == 0)
+    {
+      return new CellHeader({
+        x: x,
+        y: y
+      });
+    }
+    var cell = new Cell({
+      x: x,
+      y: y
+    });
+    cell.bind("fire", this.fire);
+    return cell;
+  },
+  generateGrid: function ()
+  {
+    for (var y = 0; y < this.get('gridSize').y; y++)
+    {
+      this.grid[y] = [];
+      for (var x = 0; x < this.get('gridSize').x; x++)
+      {
+        var cell = this.createCell(x, y);
+        this.grid[y][x] = cell;
+      }
+    }
+  },
+
   initialize: function (args)
   {
     this.fleet = [];
     this.grid = [];
     this.targets = [];
     _.bindAll(this, "fire");
-
-    for (var y = 0; y < this.get('gridSize').y; y++)
-    {
-      this.grid[y] = [];
-      for (var x = 0; x < this.get('gridSize').x; x++)
-      {
-        var cell = new Cell({
-          x: x,
-          y: y
-        });
-        cell.bind("fire", this.fire);
-        this.grid[y][x] = cell;
-      }
-    }
+    this.generateGrid();
   },
   getGrid: function ()
   {

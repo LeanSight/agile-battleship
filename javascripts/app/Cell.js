@@ -1,3 +1,30 @@
+var CellHeader = Backbone.Model.extend({
+  initialize: function() {
+    const x = this.get("x");
+    const y = this.get("y");
+
+    // fila superior con los números
+		if(y === 0) {
+			if(x>0 && x<=10 ){
+        this.text = x;
+			}
+		}
+
+    // primera columna con las letras
+		var A_charcode = "A".charCodeAt(0);
+		if(x === 0) {
+			if(y>0 && y<= 10){
+        this.text = String.fromCharCode(A_charcode+y-1);
+			}
+		}    
+  },
+
+  defaults: {
+    text: ""    
+  },
+
+});
+
 var Cell = Backbone.Model.extend({
   defaults: {
     state: "empty"
@@ -14,6 +41,7 @@ var Cell = Backbone.Model.extend({
     }
   }
 });
+
 
 var AbstractCellView = Backbone.View.extend({
   build_cell_id: function (x, y)
@@ -55,19 +83,14 @@ var CellView = AbstractCellView.extend({
 		if(this.cell_y === 0) {
 			this.disable();
 			this.$el.addClass("cell-title-top");
-			if(this.cell_x>0 && this.cell_x<=10 ){
-				this.$el.html(this.cell_x);		  
-			}
+      this.$el.html(this.model.text);
 		}
 
     // primera columna con las letras
-		var A_charcode = "A".charCodeAt(0);
 		if(this.cell_x === 0) {
 			this.disable();
 			this.$el.addClass("cell-title-left");
-			if(this.cell_y>0 && this.cell_y <= 10){
-				this.$el.html(String.fromCharCode(A_charcode+this.cell_y-1));
-			}
+      this.$el.html(this.model.text);
 		}
     this.renderBoat();
     return this;
