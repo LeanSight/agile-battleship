@@ -161,20 +161,35 @@ var BoardView = Backbone.View.extend({
   {
     this.remove();
   },
+  createCellView: function (model)
+  {
+    const x = model.get("x");
+    const y = model.get("y");
+    // if (y == 0 || x==0)
+    // {
+    //   return new CellHeader({
+    //     x: x,
+    //     y: y
+    //   });
+    // }
+    var cellView = new CellView({model:model});
+    return cellView;
+  },
   render: function ()
   {
-    var self = this;
+    var  self = this;
     _(this.model.getGrid()).each(function (row)
     {
       var tr = $("<tr />");
-      _(row).each(function (cell)
+      _(row).each(function (cellModel)
       {
-        tr.append(new CellView({
-          model: cell
-        }).render().el);
+        var cellView;
+        cellView = self.createCellView(cellModel);
+        tr.append(cellView.render().el);
       });
       self.$el.append(tr);
     });
     return this;
   }
 });
+
