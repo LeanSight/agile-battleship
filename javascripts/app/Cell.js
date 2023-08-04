@@ -82,6 +82,7 @@ var CellView = AbstractCellView.extend({
     // fila superior con los números
 		if(this.cell_y === 0) {
 			this.disable();
+      this.$el.removeClass("cell");
 			this.$el.addClass("cell-header");
       this.$el.html(this.model.text);
 		}
@@ -89,6 +90,7 @@ var CellView = AbstractCellView.extend({
     // primera columna con las letras
 		if(this.cell_x === 0) {
 			this.disable();
+      this.$el.removeClass("cell");
 			this.$el.addClass("cell-header");
       this.$el.html(this.model.text);
 		}

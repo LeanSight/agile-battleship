@@ -7,12 +7,13 @@ footer {
 }
 
 .board {
-  border-collapse: collapse;
-  background-color: solid white;
+  background-color: transparent;
+  border-collapse: inherit;
+  border-top: none;
 }
 
 .cell {
-  border-top: 1px solid #34748f;
+  border-top: 1px solid #34748f !important;
   border-left: 1px solid #34748f;
   border-right: 1px solid #34748f;
   background-color: #d9edf7;
@@ -30,10 +31,13 @@ footer {
 }
 
 .cell-header { 
-  background-color: white;
+  border-top: transparent !important;
+  border-bottom: transparent !important; 
+  background-color: transparent;
   text-align: center;
 	color: #333;
 	font-size: 24px;
+  
 }
 
 .cell-header-hover {
@@ -41,46 +45,7 @@ footer {
   color: white;
 }
 
-/* 
-.cell-title-top {
-  border-top: 1px solid white !important;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
-  
-  background-color: white;
-  text-align: center;
-	color: #333;
-	font-size: 24px;
-}
 
-.cell-title-left {
-  border-top: 1px solid white;
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
-  
-  background-color: white;
-  text-align: center;
-	color: #333;
-  min-width: 10px;
-	font-size: 24px;
-}
-
-.cell-title-hover {
-  background-color: #34748f; 
-  color: white;
-}
-
-.cell-title-left-hover {
-  border-top: 1px solid white;
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
-  
-  background-color:  #34748f;
-  text-align: center;
-	color: white;
-  min-width: 10px;
-	font-size: 24px;
-} */
 
 .showBoat.aircraft-carrier {
     background-color: #e74c3c;
@@ -236,7 +201,7 @@ footer {
 
 .grayscale .cell {
   background-color: #FFFFFF; /* White */
-  border: 2px solid #000000; /* Black */
+  border: 1px solid #000000; /* Black */
 }
 
 .grayscale .cell-hover {
@@ -247,43 +212,3 @@ footer {
   background-color: #000000;
 }
 
-/* 
-.grayscale .cell-title-top {
-  border-top: 1px solid white !important;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
-  
-  background-color: white;
-  text-align: center;
-	color: #333;
-	font-size: 24px;
-}
-
-.grayscale .cell-title-left {
-  border-top: 1px solid white;
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
-  
-  background-color: white;
-  text-align: center;
-	color: #333;
-  min-width: 10px;
-	font-size: 24px;
-}
-
-.grayscale .cell-title-hover {
-  background-color: #000000; 
-  color: white;
-}
-
-.grayscale .cell-title-left-hover {
-  border-top: 1px solid white;
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
-  
-  background-color:  #000000;
-  text-align: center;
-	color: white;
-  min-width: 10px;
-	font-size: 24px;
-} */
