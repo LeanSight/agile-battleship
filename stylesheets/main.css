@@ -24,6 +24,11 @@ footer {
   position: relative;
   padding: 0;
   margin: 0;
+
+  color: #9cc0c3;
+  font-family: 'Arial Bold', sans-serif;
+	font-size: 20px;
+  font-weight: bold;
 }
 
 .cell-hover {
