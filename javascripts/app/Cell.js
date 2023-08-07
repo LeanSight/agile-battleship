@@ -57,6 +57,22 @@ var AbstractCellView = Backbone.View.extend({
 
 });
 
+var CellHeaderView = AbstractCellView.extend({
+  tagName: "th",
+  className: "cell-header",
+
+  initialize: function() {
+    AbstractCellView.prototype.initialize.call(this);
+	},
+
+  render: function() {
+		this.$el.attr("id", this.id);
+    this.$el.html(this.model.text);
+    return this;
+  },
+
+});
+
 var CellView = AbstractCellView.extend({
   tagName: "td",
   className: "cell",
@@ -72,28 +88,10 @@ var CellView = AbstractCellView.extend({
     this.model.bind("change:state", this.updateState);
     this.model.bind("change:disabled", this.disable);
 		
-		this.in_header = this.cell_x==0 || this.cell_y==0;
-		this.in_board  = !this.in_header && this.cell_x<=10 && this.cell_y<=10;
 	},
 
   render: function() {
 		this.$el.attr("id", this.id);
-		
-    // fila superior con los números
-		if(this.cell_y === 0) {
-			this.disable();
-      this.$el.removeClass("cell");
-			this.$el.addClass("cell-header");
-      this.$el.html(this.model.text);
-		}
-
-    // primera columna con las letras
-		if(this.cell_x === 0) {
-			this.disable();
-      this.$el.removeClass("cell");
-			this.$el.addClass("cell-header");
-      this.$el.html(this.model.text);
-		}
     this.renderBoat();
     return this;
   },
@@ -139,14 +137,10 @@ var CellView = AbstractCellView.extend({
   		row_header_cell.toggleClass("cell-header-hover",doHighlight);
   },
   mouseOverCell: function(){
-    if(this.in_board){
       this.highlightCell(true);
-    }
   },
   mouseLeaveCell: function(){
-    if(this.in_board){
       this.highlightCell(false);
-    }
   },
 });
 

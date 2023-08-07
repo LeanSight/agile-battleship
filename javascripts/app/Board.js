@@ -161,6 +161,17 @@ var BoardView = Backbone.View.extend({
   {
     this.remove();
   },
+  createCellView: function (cell) {
+    if (cell.get("x") === 0 || cell.get("y") === 0) {
+      return new CellHeaderView({
+        model: cell
+      });
+    } else {
+      return new CellView({
+        model: cell
+      });
+    }
+  },
   render: function ()
   {
     var self = this;
@@ -169,12 +180,11 @@ var BoardView = Backbone.View.extend({
       var tr = $("<tr />");
       _(row).each(function (cell)
       {
-        tr.append(new CellView({
-          model: cell
-        }).render().el);
+        tr.append(self.createCellView(cell).render().el);
       });
       self.$el.append(tr);
     });
     return this;
   }
 });
+
