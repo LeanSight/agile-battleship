@@ -26,6 +26,15 @@ $(function() {
 		{type: "cruiser", x: 2, y: 9, direction: "horizontal"},
 		{type: "destroyer", x: 1, y: 4, direction: "vertical"}
 	];
+
+	// Custom fleet positions
+	const customFleetWaterfall = [
+		{type: "aircraft-carrier", x: 2, y: 5, direction: "horizontal"},
+		{type: "battleship", x: 3, y: 8, direction: "horizontal"},
+		{type: "submarine", x: 1, y: 1, direction: "vertical"},
+		{type: "cruiser", x: 4, y: 2, direction: "horizontal"},
+		{type: "destroyer", x: 8, y: 2, direction: "horizontal"}
+	];
 	
 	function startGame(shotsPerIteration, fleet) {
 		if (game) {
@@ -38,7 +47,7 @@ $(function() {
 	
 	$("#newGame").click(function() {
 		var shotsPerIteration = $("#shotsPerIteration").val();
-		var fleet = window.fixedFleet ? customFleet : [];
+		var fleet = window.fixedFleet ? customFleetWaterfall : [];
 		startGame(shotsPerIteration, fleet);
 	});
 	});
