@@ -6,6 +6,19 @@ footer {
   max-width: 60px;
 }
 
+.form-control {
+  width: 80px !important;
+}
+.navbar-brand {
+  width : 300px;
+}
+
+.navbar-form {
+  width: auto;      /* Establece el ancho según el contenido en lugar de expandirse a todo el ancho */
+  margin: 0 auto;   /* Centra el elemento horizontalmente */
+  display: table;   /* Permite que el margen automático funcione para centrar el elemento */
+}
+
 .board {
   background-color: transparent;
   border-collapse: inherit;
@@ -54,27 +67,27 @@ footer {
 
 .showBoat.aircraft-carrier {
     background-color: #e74c3c;
-    border: 1px solid #e74c3c;
+    border: 1px solid #e74c3c !important;
 }
 
 .showBoat.battleship {
     background-color:  #16a085;
-    border: 1px solid #16a085;
+    border: 1px solid #16a085 !important;
 }
 
 .showBoat.submarine {
     background-color: #f1c40f;
-    border: 1px solid #f1c40f;
+    border: 1px solid #f1c40f !important;
 }
 
 .showBoat.cruiser {
     background-color: #4aa3df;
-    border: 1px solid #4aa3df;
+    border: 1px solid #4aa3df !important;
 }
 
 .showBoat.destroyer {
     background-color: #e67e22;
-    border: 1px solid #e67e22;
+    border: 1px solid #e67e22 !important;
 }
 
 #endGameResult {
@@ -181,32 +194,32 @@ footer {
 
 .grayscale .showBoat.aircraft-carrier {
   background-color: #666666; /* Medium Gray */
-  border: 1px solid #666666; /* Medium Gray */
+  border: 1px solid #666666 !important; /* Medium Gray */
 }
 
 .grayscale .showBoat.battleship {
   background-color:  #999999; /* Light Gray */
-  border: 1px solid #999999; /* Light Gray */
+  border: 1px solid #999999 !important; /* Light Gray */
 }
 
 .grayscale .showBoat.submarine {
   background-color: #333333; /* Dark Gray */
-  border: 1px solid #333333; /* Dark Gray */
+  border: 1px solid #333333 !important; /* Dark Gray */
 }
 
 .grayscale .showBoat.cruiser {
   background-color: #bbbbbb; /* Very Light Gray */
-  border: 1px solid #bbbbbb; /* Very Light Gray */
+  border: 1px solid #bbbbbb !important; /* Very Light Gray */
 }
 
 .grayscale .showBoat.destroyer {
   background-color: #444444; /* Very Dark Gray */
-  border: 1px solid #444444; /* Very Dark Gray */
+  border: 1px solid #444444 !important; /* Very Dark Gray */
 }
 
 .grayscale .cell {
   background-color: #FFFFFF; /* White */
-  border: 1px solid #000000; /* Black */
+  border: 1px solid #000000 !important; /* Black */
 }
 
 .grayscale .cell-hover {
@@ -217,3 +230,48 @@ footer {
   background-color: #000000;
 }
 
+/* estilos para el switch que permite modificar entre grises y color */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px; /* Reducing the height to 2/3 of the original */
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 22px; /* Adding rounded borders */
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px; 
+  width: 14px; 
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%; /* Making the slider knob round */
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
