@@ -93,6 +93,28 @@
 		// The $(document).ready() function ensures the code inside it runs after the entire HTML document has loaded.
 		$(document).ready(function ()
 		{
+			// Abre el menú al hacer clic en el botón
+			$('.sandwich-btn').on('click', function(event) {
+				event.stopPropagation(); // Detiene la propagación del evento
+				$('.menu-container').toggleClass('open');
+			});
+
+			// Cerrar el menú al hacer clic fuera del menú y del botón, pero no dentro del menú
+			$(document).on('click', function(event) {
+				var menu = $('.sandwich-menu');
+				var button = $('.sandwich-btn');
+				if (!menu.is(event.target) && !button.is(event.target) && menu.has(event.target).length === 0 && button.has(event.target).length === 0) {
+					$('.menu-container').removeClass('open');
+				}
+			});
+
+			// Detiene la propagación del evento al hacer clic dentro del menú, para que el menú no se cierre
+			$('.sandwich-menu').on('click', function(event) {
+				event.stopPropagation();
+			});
+			
+			document.getElementById('toggleColorMode').checked = false;
+			
 			// This is the JavaScript code that toggles grayscale mode.
 			$('#toggleColorMode').click(function ()
 			{
@@ -133,16 +155,16 @@
 
 <body>
 	<div class="container">
-		<nav class="navbar navbar-default">
+		<nav class="navbar navbar-default" >
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-3">
-						<div class="navbar-header" width="120px">
+						<div class="navbar-header" width="120px" >
 							<a class="navbar-brand logo-text" href="#">Battleship - Batalla Naval</a>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="navbar-form" role="initGame">
+					<div class="col-md-6 navbar-center">
+						<div class="navbar-form " role="initGame">
 							<label for="shotsPerIteration">Disparos por iteración:</label>
 							<div class="input-group">
 								<input class="form-control" id="shotsPerIteration" max="40" min="1" type="number"
@@ -153,15 +175,29 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
-						<div class="grayscale-group">
-							<label>Modo Grises</label> <!-- Text moved to the left and wrapped in a label tag -->
-							<label class="switch">
-								<input type="checkbox" id="toggleColorMode">
-								<span class="slider"></span>
-							</label>
+					<div class="col-md-3" style="height: 35px; line-height: 35px;">
+						<!-- Botón Sandwich -->
+						<div class="menu-container pull-right">
+							<button type="button" class="sandwich-btn" data-toggle="dropdown">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+								<rect y="2" width="18" height="2"/>
+								<rect y="8" width="18" height="2"/>
+								<rect y="14" width="18" height="2"/>
+							</svg>
+							</button>
+							<div class="dropdown-menu sandwich-menu">
+								<!-- Switch Modo Grises -->
+								<div class="sandwich-menu-item">
+									<label>Modo Grises</label>
+									<label class="switch">
+									<input id="toggleColorMode" type="checkbox"/>
+									<span class="slider"></span>
+									</label>
+								</div>
+							<!-- Otras opciones del menú aquí -->
+							</div>
 						</div>
-					</div>
+					</div>					  
 				</div>
 			</div>
 		</nav>

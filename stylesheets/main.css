@@ -9,8 +9,15 @@ footer {
 .form-control {
   width: 80px !important;
 }
+
+.navbar {
+  min-height: 40px;
+}
+
 .navbar-brand {
-  width : 300px;
+  width: 300px;
+  height: 35px;
+  line-height: 5px; /* Centra verticalmente el texto */
 }
 
 .navbar-form {
@@ -274,4 +281,47 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(18px);
+}
+
+
+/* Estilo para el botón sandwich */
+.sandwich-btn {
+  background: transparent;
+  border: none;          /* Sin bordes */
+  border-color: transparent; /* Color de borde transparente */
+  cursor: pointer;
+}
+
+/* Estilo para el menú desplegable */
+.sandwich-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  width: 250px; /* Ancho del menú */
+  border: 1px solid #ccc;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Sombras */
+}
+
+/* Estilo para mostrar el menú cuando se hace clic en el botón */
+.menu-container.open .sandwich-menu {
+  display: block;
+}
+
+/* Estilo para el grupo de elementos que contienen el label y el switch */
+.sandwich-menu .sandwich-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Alinea los elementos a los extremos */
+  padding-left: 10px;  /* Borde de 10px desde la izquierda */
+}
+
+/* Estilo para el label del switch */
+.sandwich-menu .sandwich-menu-item .switch {
+  width: 40px; /* Ancho del switch */
+  margin-right: 10px; /* Margen derecho de 10px */
+}
+
+/* Estilo para asegurar que el control deslizante esté centrado verticalmente */
+.sandwich-menu .slider {
+  vertical-align: middle;
 }
