@@ -102,7 +102,7 @@ var Game = Backbone.Model.extend({
     if (this.get("shotsRemainingForIteration") <= 0)
     {
       this.set("shotsRemainingForIteration", this.get("shotsPerIteration"));
-      if(this.get("manualLaunchMode")===true)
+      if (this.get("manualLaunchMode") === true)
       {
         this.set("manualLaunchEnabled", true);
       }
@@ -111,7 +111,7 @@ var Game = Backbone.Model.extend({
     }
     if (this.get("shotsRemainingForGame") <= 0)
     {
-        this.endGame();
+      this.endGame();
     }
 
 
@@ -133,6 +133,15 @@ var Game = Backbone.Model.extend({
   {
     if (!this.has("endGameState"))
     {
+      if (this.get("manualLaunchMode") === true)
+      {
+        this.set("manualLaunchEnabled", true);
+      }
+      else
+      {
+        this.get("board").disable();
+        this.get("board").showFleet();
+      }
       if (this.fleetDestroyed())
       {
         this.set("endGameState", "win");
@@ -142,15 +151,7 @@ var Game = Backbone.Model.extend({
         this.set("endGameState", "lose");
       }
       this.set("shotsRemainingForIteration", 0);
-      if(this.get("manualLaunchMode")===true)
-      {
-        this.set("manualLaunchEnabled", true);
-      }
-      else
-      {
-        this.get("board").disable();
-        this.get("board").showFleet();
-      }
+
     }
   }
 });
@@ -158,7 +159,7 @@ var Game = Backbone.Model.extend({
 var GameView = Backbone.View.extend({
   initialize: function (args)
   {
-    _.bindAll(this, "updateShotsRemainingForGame", "updateShotsRemainingForIteration", "updateEndGameState", "updateFunds");
+    _.bindAll(this, "updateShotsRemainingForGame", "updateShotsRemainingForIteration", "updateEndGameState", "updateFunds","showEndGameState","handleManualLaunch");
     $(".message").addClass('hidden');
     $(".stats").removeClass('hidden');
     this.model.bind("change:shotsRemainingForGame", this.updateShotsRemainingForGame);
@@ -170,20 +171,21 @@ var GameView = Backbone.View.extend({
   },
   handleManualLaunch: function (model, doEnable) 
   {
-    console.log("valor de habilitacion de boton: "+ doEnable);
-    if(doEnable){
+    console.log("valor de habilitacion de boton: " + doEnable);
+    if (doEnable)
+    {
       $("#launchMissiles").closest('.input-group').removeClass('hidden');
-      $("#launchMissiles").click(function()
-        { 
-          model.set("manualLaunchEnabled",false);
-        });
-        model.get("board").disable();
+      $("#launchMissiles").click(function ()
+      {
+        model.set("manualLaunchEnabled", false);
+      });
+      model.get("board").disable();
     }
     else 
     {
       var board = model.get("board");
-      
-      if(!this.has("endGameState"))
+
+      if (!model.has("endGameState"))
       {
         board.setDisable(false);
         board.showFeedback();
@@ -192,6 +194,7 @@ var GameView = Backbone.View.extend({
       {
         board.showFeedback();
         board.showFleet();
+        this.showEndGameState(model.get("endGameState"));
       }
 
       $("#launchMissiles").closest('.input-group').addClass('hidden');
@@ -238,29 +241,43 @@ var GameView = Backbone.View.extend({
     $("#funds").html(this.formatMoney(funds));
     this.updateChart();
   },
-  updateEndGameState: function (model, endGameState)
+  showEndGameState: function (endGameState) 
   {
     var diff = this.model.get("funds") - this.model.get("maxShots") * this.model.get("costPerShot");
+    var message = "";
+    var alertType = "alert-info";
+
     if (endGameState === "lose")
-    { // No se destruyo toda la flota enemiga
-      // console.log(diff);
+    {
       if (diff > 0)
       {
-        $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>¡Juego Finalizado!</strong> Ganaste ' + this.formatMoney(diff) + '</div>');
-      }
-      else if (diff < 0)
+        message = '<strong>¡Juego Finalizado!</strong> Ganaste ' + this.formatMoney(diff);
+        alertType = "alert-success";
+      } else if (diff < 0)
       {
-        $("#endGameResult").html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>¡Juego Finalizado!</strong> Perdiste ' + this.formatMoney(diff) + '</div>');
-      }
-      else
+        message = '<strong>¡Juego Finalizado!</strong> Perdiste ' + this.formatMoney(diff);
+        alertType = "alert-danger";
+      } else
       {
-        $("#endGameResult").html('<div class="alert alert-info alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>¡Juego Finalizado!</strong> Mantuviste tu dinero</div>');
+        message = '<strong>¡Juego Finalizado!</strong> Mantuviste tu dinero';
       }
+    } else
+    {
+      message = '<strong>¡Has destruido la flota!</strong> Ganaste ' + this.formatMoney(diff);
+      alertType = "alert-success";
+    }
+
+    $("#endGameResult").html('<div class="alert ' + alertType + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + message + '</div>');
+
+  },
+  updateEndGameState: function (model, endGameState)
+  {
+    if (model.get("manualLaunchMode") === true)
+    {
+      model.set("manualLaunchEnabled", true);
     }
     else
-    { // Se destruyo toda la flota
-      $("#endGameResult").html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>¡Has destruido la flota!</strong> Ganaste ' + this.formatMoney(diff) + '</div>');
-    }
+      this.showEndGameState(endGameState);
   },
   formatMoney: function (amount)
   {
