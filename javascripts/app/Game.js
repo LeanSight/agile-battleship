@@ -182,9 +182,17 @@ var GameView = Backbone.View.extend({
     else 
     {
       var board = model.get("board");
-      board.showFeedback();
+      
       if(!this.has("endGameState"))
+      {
         board.setDisable(false);
+        board.showFeedback();
+      }
+      else
+      {
+        board.showFeedback();
+        board.showFleet();
+      }
 
       $("#launchMissiles").closest('.input-group').addClass('hidden');
     }
