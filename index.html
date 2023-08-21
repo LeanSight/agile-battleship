@@ -194,16 +194,15 @@
 									<span class="slider"></span>
 									</label>
 								</div>
-							<!-- Otras opciones del menú aquí -->
-								<!-- Switch Modo Grises -->
+								<!-- Switch Disparo Automático -->
 								<div class="sandwich-menu-item">
-									<label>Disparo Automático</label>
+									<label>Disparo Manual</label>
 									<label class="switch">
-									<input id="toggleAutoShoot" type="checkbox"/>
+									<input id="toggleManualShoot" type="checkbox"/>
 									<span class="slider"></span>
 									</label>
 								</div>
-</div>
+							</div>
 						</div>
 					</div>					  
 				</div>
@@ -222,13 +221,29 @@
 			</div>
 		</div>
 
-		<div class="row vertical-align">
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 text-center">
+				<!-- Primera fila: Contenedor del tablero -->
+				<div class="row">
+					<div class="col-xs-12">
+						<div id="boardcontainer"></div>
+					</div>
+				</div>
+				<!-- Segunda fila: Botón "Lanzar misiles" -->
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input-group hidden"> <!-- Clase 'hidden' agregada aquí -->
+							<span class="input-group-btn">
+								<button class="btn btn-primary" id="launchMissiles" type="button">Lanzar misiles</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<div class="row stats animated fadeInRight hidden"></div>
 			</div>
-			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 text-center">
-				<div id="boardcontainer"></div>
-			</div>
+
 		</div>
 	</div>
 

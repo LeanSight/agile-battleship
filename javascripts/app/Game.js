@@ -3,7 +3,7 @@ var Game = Backbone.Model.extend({
     shotsPerIteration: 40,
     maxShots: 40,
     costPerShot: 10000,
-    sunkenBoatCellReward: 50000
+    sunkenBoatCellReward: 50000,
   },
   setRandomFleet: function ()
   {
@@ -59,6 +59,8 @@ var Game = Backbone.Model.extend({
     this.set("shotsRemainingForGame", this.get("maxShots"));
     this.set("funds", this.get("maxShots") * this.get("costPerShot"));
     this.set("initialBudget", this.get("funds"));
+    this.set("manualLaunchMode", args.manualLaunchMode);
+    this.set("manualLaunchEnabled", false);
 
     this.sunken = 0;
     this.set("board", new Board());
@@ -100,11 +102,16 @@ var Game = Backbone.Model.extend({
     if (this.get("shotsRemainingForIteration") <= 0)
     {
       this.set("shotsRemainingForIteration", this.get("shotsPerIteration"));
-      this.get("board").showFeedback();
+      if(this.get("manualLaunchMode")===true)
+      {
+        this.set("manualLaunchEnabled", true);
+      }
+      else
+        this.get("board").showFeedback();
     }
     if (this.get("shotsRemainingForGame") <= 0)
     {
-      this.endGame();
+        this.endGame();
     }
 
 
@@ -135,8 +142,15 @@ var Game = Backbone.Model.extend({
         this.set("endGameState", "lose");
       }
       this.set("shotsRemainingForIteration", 0);
-      this.get("board").disable();
-      this.get("board").showFleet();
+      if(this.get("manualLaunchMode")===true)
+      {
+        this.set("manualLaunchEnabled", true);
+      }
+      else
+      {
+        this.get("board").disable();
+        this.get("board").showFleet();
+      }
     }
   }
 });
@@ -151,6 +165,29 @@ var GameView = Backbone.View.extend({
     this.model.bind("change:shotsRemainingForIteration", this.updateShotsRemainingForIteration);
     this.model.bind("change:funds", this.updateFunds);
     this.model.bind("change:endGameState", this.updateEndGameState);
+    this.model.bind("change:manualLaunchEnabled", this.handleManualLaunch);
+
+  },
+  handleManualLaunch: function (model, doEnable) 
+  {
+    console.log("valor de habilitacion de boton: "+ doEnable);
+    if(doEnable){
+      $("#launchMissiles").closest('.input-group').removeClass('hidden');
+      $("#launchMissiles").click(function()
+        { 
+          model.set("manualLaunchEnabled",false);
+        });
+        model.get("board").disable();
+    }
+    else 
+    {
+      var board = model.get("board");
+      board.showFeedback();
+      if(!this.has("endGameState"))
+        board.setDisable(false);
+
+      $("#launchMissiles").closest('.input-group').addClass('hidden');
+    }
   },
   render: function ()
   {
@@ -158,13 +195,13 @@ var GameView = Backbone.View.extend({
       model: this.model.get("board")
     });
     $("#boardcontainer").append(this.boardView.render().el);
-
     this.updateShotsRemainingForGame();
     this.updateShotsRemainingForIteration();
     this.updateFunds();
     $("#endGameResult").html("");
     return this;
   },
+
   updateChart: function ()
   {
     var remainingShots = this.model.get("shotsRemainingForGame");

@@ -129,16 +129,16 @@ var Board = Backbone.Model.extend({
   {
     return this.fleet.length;
   },
-  disable: function ()
-  {
-    this.set("disabled", true);
-    for (var y = 0; y < this.get('gridSize').y; y++)
-    {
-      for (var x = 0; x < this.get('gridSize').x; x++)
-      {
-        this.grid[y][x].set("disabled", true);
+  setDisable: function(doDisable) {
+    this.set("disabled", doDisable);
+    for (var y = 0; y < this.get('gridSize').y; y++) {
+      for (var x = 0; x < this.get('gridSize').x; x++) {
+        this.grid[y][x].set("disabled", doDisable);
       }
     }
+  },
+  disable: function() {
+    this.setDisable(true);
   },
   showFleet: function ()
   {
@@ -151,7 +151,7 @@ var Board = Backbone.Model.extend({
 
 var BoardView = Backbone.View.extend({
   tagName: "table",
-  className: "board table table-responsive animated fadeInUp",
+  className: "board table table-responsive animated fadeInDown",
   initialize: function ()
   {
     _.bindAll(this, "removeBoard");

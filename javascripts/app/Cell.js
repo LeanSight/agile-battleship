@@ -76,6 +76,9 @@ var CellHeaderView = AbstractCellView.extend({
 var CellView = AbstractCellView.extend({
   tagName: "td",
   className: "cell",
+  defaults: {
+    fired : false, //todo: esto debiera estar en el modelo?
+  },
   events: {
     "click": "fire",
     "mouseover": "mouseOverCell",
@@ -83,13 +86,12 @@ var CellView = AbstractCellView.extend({
   },
   initialize: function() {
     AbstractCellView.prototype.initialize.call(this);
-    _.bindAll(this, "renderBoat", "updateState", "disable");
+    _.bindAll(this, "renderBoat", "updateState", "disable", "fire");
     this.model.bind("change:boat", this.renderBoat);
     this.model.bind("change:state", this.updateState);
     this.model.bind("change:disabled", this.disable);
 		
 	},
-
   render: function() {
 		this.$el.attr("id", this.id);
     this.renderBoat();
@@ -118,12 +120,19 @@ var CellView = AbstractCellView.extend({
   fire: function() {
     this.$el.html("<img class='target marker' src='images/coordenada.svg'/>");
     this.model.fire();
+    this.fired = true;
     this.$el.unbind("click");
   },
-  disable: function() {
-    this.$el.unbind("click");
-  }
-  ,
+  disable: function(model, doDisable) 
+  {
+    if (doDisable) {
+      this.$el.unbind("click"); // Desvincula el evento de clic si enable es false
+      
+    } else if(!this.fired)
+    {
+      this.$el.bind("click", this.fire); // Vincula el evento de clic si enable es true y no ha sido disparada la celda
+    }
+  },
   highlightCell: function(doHighlight){
       this.$el.toggleClass("cell-hover",doHighlight);
       
