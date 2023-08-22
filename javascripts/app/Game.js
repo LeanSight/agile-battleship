@@ -129,19 +129,18 @@ var Game = Backbone.Model.extend({
   {
     return this.sunken >= this.get("board").fleetSize();
   },
+  launchMissiles: function ()
+  {
+    var board = this.get("board");
+    board.showFeedback();
+    if (this.has("endGameState"))
+      board.showFleet();
+  },
   endGame: function ()
   {
+
     if (!this.has("endGameState"))
     {
-      if (this.get("manualLaunchMode") === true)
-      {
-        this.set("manualLaunchEnabled", true);
-      }
-      else
-      {
-        this.get("board").disable();
-        this.get("board").showFleet();
-      }
       if (this.fleetDestroyed())
       {
         this.set("endGameState", "win");
@@ -151,7 +150,10 @@ var Game = Backbone.Model.extend({
         this.set("endGameState", "lose");
       }
       this.set("shotsRemainingForIteration", 0);
-
+      if (this.get("manualLaunchMode") === true)
+        this.set("manualLaunchEnabled", true);
+      else
+        this.launchMissiles()
     }
   }
 });
@@ -169,34 +171,23 @@ var GameView = Backbone.View.extend({
     this.model.bind("change:manualLaunchEnabled", this.handleManualLaunch);
 
   },
+
   handleManualLaunch: function (model, doEnable) 
   {
-    console.log("valor de habilitacion de boton: " + doEnable);
+    var board = model.get("board");
     if (doEnable)
     {
       $("#launchMissiles").closest('.input-group').removeClass('hidden');
       $("#launchMissiles").click(function ()
       {
+        model.launchMissiles();
         model.set("manualLaunchEnabled", false);
       });
-      model.get("board").disable();
+      board.disable();
     }
     else 
     {
-      var board = model.get("board");
-
-      if (!model.has("endGameState"))
-      {
-        board.setDisable(false);
-        board.showFeedback();
-      }
-      else
-      {
-        board.showFeedback();
-        board.showFleet();
-        this.showEndGameState(model.get("endGameState"));
-      }
-
+      board.setDisable(false);
       $("#launchMissiles").closest('.input-group').addClass('hidden');
     }
   },
