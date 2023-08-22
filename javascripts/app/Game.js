@@ -138,22 +138,14 @@ var Game = Backbone.Model.extend({
   },
   endGame: function ()
   {
-
     if (!this.has("endGameState"))
     {
-      if (this.fleetDestroyed())
-      {
-        this.set("endGameState", "win");
-      }
-      else
-      {
-        this.set("endGameState", "lose");
-      }
+      this.set("endGameState", this.fleetDestroyed() ? "win" : "lose");
       this.set("shotsRemainingForIteration", 0);
       if (this.get("manualLaunchMode") === true)
         this.set("manualLaunchEnabled", true);
       else
-        this.launchMissiles()
+        this.launchMissiles();
     }
   }
 });
@@ -161,35 +153,37 @@ var Game = Backbone.Model.extend({
 var GameView = Backbone.View.extend({
   initialize: function (args)
   {
-    _.bindAll(this, "updateShotsRemainingForGame", "updateShotsRemainingForIteration", "updateEndGameState", "updateFunds","showEndGameState","handleManualLaunch");
+    _.bindAll(this, "updateShotsRemainingForGame", "updateShotsRemainingForIteration", "updateEndGameState", "updateFunds","showEndGameState","handleManualLaunchButtonEnabling");
     $(".message").addClass('hidden');
     $(".stats").removeClass('hidden');
     this.model.bind("change:shotsRemainingForGame", this.updateShotsRemainingForGame);
     this.model.bind("change:shotsRemainingForIteration", this.updateShotsRemainingForIteration);
     this.model.bind("change:funds", this.updateFunds);
     this.model.bind("change:endGameState", this.updateEndGameState);
-    this.model.bind("change:manualLaunchEnabled", this.handleManualLaunch);
+    this.model.bind("change:manualLaunchEnabled", this.handleManualLaunchButtonEnabling);
 
   },
-
-  handleManualLaunch: function (model, doEnable) 
-  {
+  handleManualLaunchButtonEnabling: function (model, doEnable) {
     var board = model.get("board");
-    if (doEnable)
-    {
-      $("#launchMissiles").closest('.input-group').removeClass('hidden');
-      $("#launchMissiles").click(function ()
-      {
-        model.launchMissiles();
-        model.set("manualLaunchEnabled", false);
-      });
+    var launchMissilesButton = $("#launchMissiles").closest('.input-group');
+    
+    if (doEnable) {
+      this.enableManualLaunch(model, launchMissilesButton);
       board.disable();
-    }
-    else 
-    {
+    } else {
+      this.disableManualLaunch(launchMissilesButton);
       board.setDisable(false);
-      $("#launchMissiles").closest('.input-group').addClass('hidden');
     }
+  },
+  enableManualLaunch: function(model, button) {
+    button.removeClass('hidden');
+    $("#launchMissiles").click(function () {
+      model.launchMissiles();
+      model.set("manualLaunchEnabled", false);
+    });
+  },
+  disableManualLaunch: function(button) {
+    button.addClass('hidden');
   },
   render: function ()
   {
